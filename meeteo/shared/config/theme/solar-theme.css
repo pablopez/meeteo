@@ -1,0 +1,47 @@
+[data-sky-state="deep-night"] {
+  --color-solar-bg: #0a0f1d;
+  --color-solar-surface: #151c2e;
+  --color-solar-text: #ffffff;
+  --color-solar-accent: #64748b;
+  --sky-solar-gradient: linear-gradient(180deg, #0a0f1d 0%, #111827 100%);
+}
+
+[data-sky-state="pre-dawn"] {
+  --color-solar-bg: #1a1b41;
+  --color-solar-surface: #292850;
+  --color-solar-text: #ffffff;
+  --color-solar-accent: #a78bfa;
+  --sky-solar-gradient: linear-gradient(180deg, #1a1b41 0%, #312e5f 65%, #5b345b 100%);
+}
+
+[data-sky-state="dawn"] {
+  --color-solar-bg: #ff9a8b;
+  --color-solar-surface: #ffd1c7;
+  --color-solar-text: #3f1d2e;
+  --color-solar-accent: #be185d;
+  --sky-solar-gradient: linear-gradient(180deg, #7c3aed 0%, #ff9a8b 55%, #fecf9a 100%);
+}
+
+[data-sky-state="day"] {
+  --color-solar-bg: #4facfe;
+  --color-solar-surface: #dbeafe;
+  --color-solar-text: #082f49;
+  --color-solar-accent: #0369a1;
+  --sky-solar-gradient: linear-gradient(180deg, #4facfe 0%, #8fd3f4 60%, #e0f2fe 100%);
+}
+
+[data-sky-state="dusk"] {
+  --color-solar-bg: #fa709a;
+  --color-solar-surface: #fecdd3;
+  --color-solar-text: #ffffff;
+  --color-solar-accent: #ffe4e6;
+  --sky-solar-gradient: linear-gradient(180deg, #6d28d9 0%, #fa709a 55%, #fee140 100%);
+}
+
+[data-sky-state="post-dusk"] {
+  --color-solar-bg: #2b1b54;
+  --color-solar-surface: #3b2a68;
+  --color-solar-text: #ffffff;
+  --color-solar-accent: #c4b5fd;
+  --sky-solar-gradient: linear-gradient(180deg, #2b1b54 0%, #312e81 55%, #172554 100%);
+}

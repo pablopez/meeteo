@@ -1,0 +1,1 @@
+export { useSelectedCity } from "./model/use-selected-city";

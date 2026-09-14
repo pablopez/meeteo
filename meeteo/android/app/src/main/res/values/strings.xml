@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Meeteo</string>
+    <string name="title_activity_main">Meeteo</string>
+    <string name="package_name">com.tuempresa.meeteo</string>
+    <string name="custom_url_scheme">com.tuempresa.meeteo</string>
+</resources>
