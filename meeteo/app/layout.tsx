@@ -35,13 +35,22 @@ export const viewport: Viewport = {
   themeColor: "#0284c7",
 };
 
+import { Nunito } from 'next/font/google';
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800', '900'],
+  variable: '--font-nunito',
+  display: 'swap',
+});
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${nunito.variable} h-full antialiased`}
     >
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`antialiased`}>
         <I18nProvider>
           <ToastProvider>{children}</ToastProvider>
         </I18nProvider>
