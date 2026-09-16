@@ -147,7 +147,7 @@ export function HomePage() {
 
       <main className="min-h-screen bg-transparent px-6 py-8 text-solar-text transition-colors duration-[800ms] ease-in-out">
         <section className="mx-auto max-w-5xl">
-          <header className="mb-6 text-center">
+          <header className="sr-only">
             <h1 className="text-3xl font-bold">
               {t("home.title")}
             </h1>
