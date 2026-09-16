@@ -5,6 +5,16 @@ export {
 } from "./icon";
 
 export {
+  FavoriteButton,
+  type FavoriteButtonProps,
+} from "./favorite-button";
+
+export {
+  ConfirmModal,
+  type ConfirmModalProps,
+} from "./modal";
+
+export {
   Button,
   type ButtonProps,
 } from "./button";

@@ -1,15 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { City } from "@/entities/city";
 import { useFavoriteCities } from "@/features/favorite-cities";
-import { Card, Icon, Panel } from "@/shared/ui";
+import { Card, ConfirmModal, Icon, Panel } from "@/shared/ui";
 
 export function FavoritesPanel() {
   const { t } = useTranslation();
   const { favorites, removeFavorite, reindexFavorite } =
     useFavoriteCities();
+
+  const [cityToRemove, setCityToRemove] =
+    useState<City | null>(null);
 
   function handleMoveUp(city: City) {
     const index = favorites.findIndex(
@@ -107,7 +111,7 @@ export function FavoritesPanel() {
                     city: city.name,
                   })}
                   onClick={() =>
-                    removeFavorite(city)
+                    setCityToRemove(city)
                   }
                   className="rounded-lg p-2 text-danger transition-colors hover:text-danger/80"
                 >
@@ -118,6 +122,29 @@ export function FavoritesPanel() {
           </li>
         ))}
       </ul>
+
+      <ConfirmModal
+        isOpen={cityToRemove !== null}
+        title={t("favorites.confirmRemoveTitle")}
+        body={
+          cityToRemove
+            ? t("favorites.confirmRemoveBody", {
+                city: cityToRemove.name,
+              })
+            : ""
+        }
+        confirmLabel={t("common.confirm")}
+        cancelLabel={t("common.cancel")}
+        confirmVariant="danger"
+        onConfirm={() => {
+          if (cityToRemove) {
+            removeFavorite(cityToRemove);
+          }
+
+          setCityToRemove(null);
+        }}
+        onCancel={() => setCityToRemove(null)}
+      />
     </Panel>
   );
 }

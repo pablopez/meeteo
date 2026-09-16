@@ -39,15 +39,28 @@ describe("FavoriteCityButton", () => {
     expect(JSON.parse(stored!)).toHaveLength(1);
   });
 
-  it("removes the city from favorites when clicked again", async () => {
+  it("removes the city from favorites when confirmed", async () => {
     const user = userEvent.setup();
 
     render(<FavoriteCityButton city={madrid} />);
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", {
+      name: "Add to favorites",
+    });
 
     await user.click(button);
-    await user.click(button);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Remove from favorites",
+      }),
+    );
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Confirm",
+      }),
+    );
 
     const stored = window.localStorage.getItem(
       "meeteo:favorite-cities",

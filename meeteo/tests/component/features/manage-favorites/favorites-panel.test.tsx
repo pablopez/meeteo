@@ -74,6 +74,12 @@ describe("FavoritesPanel", () => {
       }),
     );
 
+    await user.click(
+      screen.getByRole("button", {
+        name: "Confirm",
+      }),
+    );
+
     await waitFor(() => {
       expect(
         screen.queryByText("Madrid"),

@@ -81,6 +81,10 @@ location: {
   attribution: "Location data © OpenStreetMap contributors",
   overviewLabel: "Location overview",
 },
+common: {
+  confirm: "Confirm",
+  cancel: "Cancel",
+},
 favorites: {
   title: "Favorites",
   section: "Favorite cities",
@@ -89,6 +93,8 @@ favorites: {
   empty: "No favorite cities yet.",
   moveUp: "Move {{city}} up",
   moveDown: "Move {{city}} down",
+  confirmRemoveTitle: "Remove favorite",
+  confirmRemoveBody: "Are you sure you want to remove {{city}} from your favorites?",
 },
 environment: {
   title: "Environmental conditions in {{location}}",
