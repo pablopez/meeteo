@@ -1,4 +1,7 @@
-import { mapWmoWeather } from "@/entities/weather/lib/wmo-mapper";
+import {
+  getFlatMeteoconName,
+  mapWmoWeather,
+} from "@/entities/weather/lib/wmo-mapper";
 
 describe("mapWmoWeather", () => {
   it.each([71, 73, 75, 77, 85, 86])(
@@ -50,4 +53,30 @@ describe("mapWmoWeather", () => {
       });
     },
   );
+});
+
+describe("getFlatMeteoconName", () => {
+  it("maps clear weather to clear-day and clear-night", () => {
+    expect(getFlatMeteoconName(0, true)).toBe("clear-day");
+    expect(getFlatMeteoconName(0, false)).toBe("clear-night");
+  });
+
+  it("maps rain to rain", () => {
+    expect(getFlatMeteoconName(61, true)).toBe("rain");
+  });
+
+  it("maps thunderstorms with hail to day and night variants", () => {
+    expect(getFlatMeteoconName(96, true)).toBe(
+      "thunderstorms-hail-day",
+    );
+    expect(getFlatMeteoconName(99, false)).toBe(
+      "thunderstorms-hail-night",
+    );
+  });
+
+  it("falls back to not-available for unknown codes", () => {
+    expect(getFlatMeteoconName(9999, true)).toBe(
+      "not-available",
+    );
+  });
 });

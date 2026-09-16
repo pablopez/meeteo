@@ -40,3 +40,4 @@ export { PrecipitationCard } from "./ui/precipitation-card";
 export { UvIndexCard } from "./ui/uv-index-card";
 export { SunTimesCard } from "./ui/sun-times-card";
 export { WeatherEffects } from "./ui/weather-effects";
+export { WeatherFlatIcon } from "./ui/weather-flat-icon";

@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import type { DailyEnvironmentalConditions } from "@/entities/environment";
-import { formatWeatherMeasurement, type DailyForecast } from "@/entities/weather";
+import { formatWeatherMeasurement, WeatherFlatIcon, type DailyForecast } from "@/entities/weather";
 
 type ForecastDayView = {
   weather: DailyForecast;
@@ -121,7 +121,13 @@ export function ForecastTable({
               </td>
 
               <td className="whitespace-nowrap px-3 py-3">
-                <div>
+                <div className="flex items-center gap-2">
+                  <WeatherFlatIcon
+                    wmoCode={weather.weatherCode}
+                    isDay={true}
+                    className="h-6 w-6"
+                  />
+
                   <span>
                     {formatWeatherMeasurement(
                       weather.precipitation.amount,
@@ -130,20 +136,12 @@ export function ForecastTable({
                       unavailable,
                     )}
                   </span>
-                  <span className="ml-2 text-sm text-muted-foreground">
+
+                  <span className="text-sm text-muted-foreground">
                     {t(
                       `weather.precipitationTypes.${weather.precipitation.type}`,
                     )}
                   </span>
-                  {weather.precipitation.isThunderstorm && (
-                    <span
-                      className="ml-1"
-                      aria-label={t("weather.thunderstorm")}
-                      title={t("weather.thunderstorm")}
-                    >
-                      ⚡
-                    </span>
-                  )}
                 </div>
               </td>
 

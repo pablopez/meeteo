@@ -342,6 +342,10 @@ describe("WeatherOverview", () => {
     ).toHaveLength(2);
 
     expect(
+      within(table).getAllByAltText("Weather icon"),
+    ).toHaveLength(2);
+
+    expect(
       within(table).getByText("6.2"),
     ).toBeInTheDocument();
 
@@ -351,10 +355,6 @@ describe("WeatherOverview", () => {
 
     expect(
       within(table).getByText("20:43"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByLabelText("Thunderstorm"),
     ).toBeInTheDocument();
   });
 

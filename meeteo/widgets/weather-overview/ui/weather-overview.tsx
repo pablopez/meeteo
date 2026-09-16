@@ -8,6 +8,7 @@ import type { Location } from "@/entities/location";
 import {
   getSkyState,
   WeatherEffects,
+  WeatherFlatIcon,
   type DailyForecast,
 } from "@/entities/weather";
 import { ForecastCarousel } from "@/features/browse-forecast-days";
@@ -145,6 +146,11 @@ export function WeatherOverview({
         )
       : "deep-night";
 
+  const isDaytime =
+    skyState === "dawn" ||
+    skyState === "day" ||
+    skyState === "dusk";
+
   useEffect(() => {
     if (!isActive || !timezone || !sunriseIso || !sunsetIso) {
       return;
@@ -226,14 +232,24 @@ export function WeatherOverview({
         data-sky-state={skyState}
         className="relative z-10"
       >
-        <h2
-        id="weather-title"
-        className="text-2xl font-bold"
-      >
-        {t("weather.title")}
-      </h2>
+        <div className="flex items-center gap-4">
+          <h2
+            id="weather-title"
+            className="text-2xl font-bold"
+          >
+            {t("weather.title")}
+          </h2>
 
-      {environmentStatus === "loading" && (
+          {currentDay && (
+            <WeatherFlatIcon
+              wmoCode={currentDay.weatherCode}
+              isDay={isDaytime}
+              className="h-12 w-12 md:h-16 md:w-16"
+            />
+          )}
+        </div>
+
+        {environmentStatus === "loading" && (
         <p className="mt-2 text-xs text-muted-foreground">
           {t("environment.loading")}
         </p>
