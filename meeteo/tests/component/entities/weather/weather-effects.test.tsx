@@ -3,60 +3,32 @@ import { render, screen } from "@testing-library/react";
 import { WeatherEffects } from "@/entities/weather";
 
 describe("WeatherEffects", () => {
-  it("renders fewer than 50 rain particles", () => {
+  it.each([
+    "deep-night",
+    "pre-dawn",
+    "dawn",
+    "day",
+    "dusk",
+    "post-dusk",
+  ] as const)("renders a solid background for the %s solar state", (skyState) => {
     const { container } = render(
-      <WeatherEffects
-        precipitationType="rain"
-        isThunderstorm={false}
-        weatherCode={61}
-      />,
+      <WeatherEffects skyState={skyState} />,
     );
 
-    const particles = container.querySelectorAll(
-      ".weather-particle",
-    );
-
-    expect(particles).toHaveLength(40);
-    expect(particles.length).toBeLessThan(50);
     expect(screen.getByTestId("weather-effects")).toHaveClass(
-      "pointer-events-none",
       "fixed",
+      "inset-0",
+      "-z-10",
+      "bg-[var(--color-solar-bg)]",
+      "transition-colors",
+      "duration-[2000ms]",
+      "ease-in-out",
     );
-  });
-
-  it("renders snow particles, clouds and lightning conditionally", () => {
-    const { container, rerender } = render(
-      <WeatherEffects
-        precipitationType="snow"
-        isThunderstorm={false}
-        weatherCode={3}
-      />,
+    expect(screen.getByTestId("weather-effects")).toHaveAttribute(
+      "data-sky-state",
+      skyState,
     );
-
-    expect(container.querySelectorAll(".weather-cloud")).toHaveLength(3);
-    expect(container.querySelectorAll(".weather-particle")).toHaveLength(40);
-
-    rerender(
-      <WeatherEffects
-        precipitationType="rain"
-        isThunderstorm
-        weatherCode={95}
-      />,
-    );
-
-    expect(container.querySelector(".weather-lightning")).toBeInTheDocument();
-    expect(container.querySelectorAll(".weather-cloud")).toHaveLength(0);
-  });
-
-  it("renders nothing for clear weather", () => {
-    const { container } = render(
-      <WeatherEffects
-        precipitationType="none"
-        isThunderstorm={false}
-        weatherCode={0}
-      />,
-    );
-
-    expect(container).toBeEmptyDOMElement();
+    expect(container.querySelectorAll("svg, canvas")).toHaveLength(0);
+    expect(screen.getByTestId("weather-effects")).toBeEmptyDOMElement();
   });
 });

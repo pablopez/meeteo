@@ -2,8 +2,18 @@
 
 import { useTranslation } from "react-i18next";
 
-import type { DailyEnvironmentalConditions } from "@/entities/environment";
-import { formatWeatherMeasurement, WeatherFlatIcon, type DailyForecast } from "@/entities/weather";
+import {
+  getAirQualityColorClass,
+  getAllergenMeteoconName,
+  getPollenRisk,
+  getPollenRiskMeteoconName,
+  type DailyEnvironmentalConditions,
+} from "@/entities/environment";
+import {
+  formatWeatherMeasurement,
+  WeatherFlatIcon,
+  type DailyForecast,
+} from "@/entities/weather";
 
 type ForecastDayView = {
   weather: DailyForecast;
@@ -125,7 +135,7 @@ export function ForecastTable({
                   <WeatherFlatIcon
                     wmoCode={weather.weatherCode}
                     isDay={true}
-                    className="h-6 w-6"
+                    className="h-10 w-10"
                   />
 
                   <span>
@@ -160,11 +170,19 @@ export function ForecastTable({
               </td>
 
               <td className="whitespace-nowrap px-3 py-3">
-                {environment?.airQuality
-                  ? formatNumber(
-                      environment.airQuality.europeanIndex,
-                    )
-                  : unavailable}
+                <span className="inline-flex items-center gap-2">
+                  {environment?.airQuality && (
+                    <span
+                      className={`h-3 w-3 shrink-0 rounded-full ${getAirQualityColorClass(environment.airQuality.europeanIndex)}`}
+                      aria-hidden="true"
+                    />
+                  )}
+                  {environment?.airQuality
+                    ? formatNumber(
+                        environment.airQuality.europeanIndex,
+                      )
+                    : unavailable}
+                </span>
               </td>
 
               <td className="whitespace-nowrap px-3 py-3">
@@ -182,15 +200,41 @@ export function ForecastTable({
                   <ul className="space-y-0.5 text-sm">
                     {environment.allergyMeasurements.map(
                       (measurement) => (
-                        <li key={measurement.allergen}>
-                          {t(
-                            `environment.allergies.allergens.${measurement.allergen}`,
-                          )}
-                          :{" "}
-                          {formatNumber(
-                            measurement.concentration,
-                          )}{" "}
-                          {measurement.unit}
+                        <li
+                          key={measurement.allergen}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="relative shrink-0">
+                            <img
+                              src={`/meteocons/flat/${getAllergenMeteoconName(measurement.allergen)}.svg`}
+                              alt=""
+                              loading="lazy"
+                              className="h-10 w-10"
+                            />
+                            <img
+                              src={`/meteocons/flat/${getPollenRiskMeteoconName(measurement.concentration)}.svg`}
+                              alt=""
+                              loading="lazy"
+                              className="absolute -bottom-1 -right-1 h-5 w-5"
+                            />
+                          </span>
+                          <span className="flex flex-col">
+                            <span>
+                              {t(
+                                `environment.allergies.allergens.${measurement.allergen}`,
+                              )}
+                              :{" "}
+                              {formatNumber(
+                                measurement.concentration,
+                              )}{" "}
+                              {measurement.unit}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {t(
+                                `environment.allergies.risks.${getPollenRisk(measurement.concentration)}`,
+                              )}
+                            </span>
+                          </span>
                         </li>
                       ),
                     )}

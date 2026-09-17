@@ -15,7 +15,7 @@ export function WeatherFlatIcon({
 
   return (
     <img
-      src={`/meteocons/${iconName}.svg`}
+      src={`/meteocons/flat/${iconName}.svg`}
       alt="Weather icon"
       loading="lazy"
       className={className}

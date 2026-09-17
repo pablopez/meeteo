@@ -15,11 +15,13 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "postinstall": "cpy \"node_modules/@meteocons/svg/flat/*.svg\" \"public/meteocons/flat/\" --flat"
   },
   "dependencies": {
     "@capacitor/core": "8.3.5",
     "@ducanh2912/next-pwa": "10.2.9",
+    "@meteocons/svg": "^0.1.0",
     "i18next": "^26.4.1",
     "leaflet": "1.9.4",
     "lucide-react": "^1.42.0",
@@ -44,6 +46,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cpy-cli": "^7.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "jest": "^30.5.1",

@@ -1,4 +1,10 @@
 export {
+  getUvMeteoconName,
+  getUvRisk,
+  type UvRisk,
+} from "./lib/get-uv-index-presentation";
+
+export {
   createTemperature,
   type Temperature,
 } from "./model/temperature";

@@ -1,3 +1,11 @@
+export { getAirQualityColorClass } from "./lib/get-air-quality-color-class";
+export {
+  getAllergenMeteoconName,
+  getPollenRisk,
+  getPollenRiskMeteoconName,
+  type PollenRisk,
+} from "./lib/get-allergen-meteocon-name";
+
 export {
   createAirQuality,
   type AirQuality,

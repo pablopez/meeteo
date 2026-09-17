@@ -14,7 +14,7 @@ export function Card({
     <div
       {...props}
       className={[
-        "rounded-2xl border border-border bg-surface/60 backdrop-blur-md overflow-hidden transition-colors duration-700 ease-in-out",
+        "rounded-2xl bg-transparent overflow-hidden transition-colors duration-700 ease-in-out",
         className,
       ]
         .filter(Boolean)

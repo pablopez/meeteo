@@ -156,6 +156,7 @@ describe("WeatherOverview", () => {
     );
     expect(mockedGetSkyState).toHaveBeenCalledWith(
       expect.any(Date),
+      "Europe/Madrid",
       "2026-09-04T07:42:00Z",
       "2026-09-04T20:43:00Z",
     );
@@ -163,11 +164,10 @@ describe("WeatherOverview", () => {
       "data-sky-state",
       "day",
     );
-    expect(document.documentElement).toHaveAttribute(
-      "data-weather-state",
-      "rain",
+    expect(screen.getByTestId("weather-effects")).toHaveAttribute(
+      "data-sky-state",
+      "day",
     );
-    expect(screen.getByTestId("weather-effects")).toBeInTheDocument();
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
     expect(screen.getByText("28 °C")).toBeInTheDocument();
@@ -194,7 +194,7 @@ describe("WeatherOverview", () => {
     );
   });
 
-  it("removes atmospheric effects when the selected city is clear", async () => {
+  it("keeps the solar background when the selected city is clear", async () => {
     mockedGetWeatherForecast.mockResolvedValue(forecast);
     mockedGetEnvironmentForecast.mockResolvedValue(
       environmentForecast,
@@ -235,12 +235,9 @@ describe("WeatherOverview", () => {
     rerender(<WeatherOverview location={barcelona} />);
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId("weather-effects"),
-      ).not.toBeInTheDocument();
-      expect(document.documentElement).toHaveAttribute(
-        "data-weather-state",
-        "clear",
+      expect(screen.getByTestId("weather-effects")).toHaveAttribute(
+        "data-sky-state",
+        "day",
       );
     });
   });

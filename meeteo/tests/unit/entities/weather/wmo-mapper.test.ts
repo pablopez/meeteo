@@ -1,3 +1,4 @@
+import { getUvMeteoconName, getUvRisk } from "@/entities/weather";
 import {
   getFlatMeteoconName,
   mapWmoWeather,
@@ -61,16 +62,26 @@ describe("getFlatMeteoconName", () => {
     expect(getFlatMeteoconName(0, false)).toBe("clear-night");
   });
 
-  it("maps rain to rain", () => {
-    expect(getFlatMeteoconName(61, true)).toBe("rain");
-  });
+  it.each([
+    [3, "overcast-day", "overcast-night"],
+    [51, "overcast-day-drizzle", "overcast-night-drizzle"],
+    [56, "overcast-day-sleet", "overcast-night-sleet"],
+    [61, "overcast-day-rain", "overcast-night-rain"],
+    [71, "overcast-day-snow", "overcast-night-snow"],
+  ] as const)(
+    "maps WMO code %s to day and night variants",
+    (weatherCode, dayIcon, nightIcon) => {
+      expect(getFlatMeteoconName(weatherCode, 1)).toBe(dayIcon);
+      expect(getFlatMeteoconName(weatherCode, 0)).toBe(nightIcon);
+    },
+  );
 
   it("maps thunderstorms with hail to day and night variants", () => {
     expect(getFlatMeteoconName(96, true)).toBe(
-      "thunderstorms-hail-day",
+      "thunderstorms-day-hail",
     );
     expect(getFlatMeteoconName(99, false)).toBe(
-      "thunderstorms-hail-night",
+      "thunderstorms-night-hail",
     );
   });
 
@@ -78,5 +89,23 @@ describe("getFlatMeteoconName", () => {
     expect(getFlatMeteoconName(9999, true)).toBe(
       "not-available",
     );
+  });
+});
+
+describe("UV index presentation", () => {
+  it.each([
+    [0, "uv-index-1", "low"],
+    [3, "uv-index-3", "moderate"],
+    [6.2, "uv-index-6", "high"],
+    [8, "uv-index-8", "very-high"],
+    [11, "uv-index-11", "extreme"],
+    [12, "uv-index-11-plus", "extreme"],
+  ] as const)("maps UV %s to its icon and risk", (value, icon, risk) => {
+    expect(getUvMeteoconName(value)).toBe(icon);
+    expect(getUvRisk(value)).toBe(risk);
+  });
+
+  it("uses the generic UV icon when data is unavailable", () => {
+    expect(getUvMeteoconName(null)).toBe("uv-index");
   });
 });

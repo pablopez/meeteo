@@ -152,104 +152,21 @@
 }
 
 :root {
-  --sky-solar-gradient: linear-gradient(180deg, #38bdf8, #f0f9ff);
-  --sky-weather-overlay: linear-gradient(transparent, transparent);
-}
-
-:root[data-weather-state="cloudy"] {
-  --sky-weather-overlay: linear-gradient(180deg, rgb(71 85 105 / 55%), rgb(148 163 184 / 30%));
-}
-
-:root[data-weather-state="rain"] {
-  --sky-weather-overlay: linear-gradient(180deg, rgb(15 23 42 / 68%), rgb(71 85 105 / 48%));
-}
-
-:root[data-weather-state="snow"] {
-  --sky-weather-overlay: linear-gradient(180deg, rgb(226 232 240 / 55%), rgb(248 250 252 / 38%));
-}
-
-:root[data-weather-state="thunderstorm"] {
-  --sky-weather-overlay: linear-gradient(180deg, rgb(2 6 23 / 82%), rgb(30 41 59 / 65%));
+  --color-solar-bg: #38bdf8;
 }
 
 body {
   min-height: 100vh;
   background-color: var(--color-solar-bg, var(--background));
-  background-image:
-    var(--sky-weather-overlay),
-    var(--sky-solar-gradient);
-  background-attachment: fixed;
-  background-size: cover;
   color: var(--color-solar-text, var(--foreground));
   transition:
-    background-color 3s ease-in-out,
+    background-color 2s ease-in-out,
     color 1s ease-in-out;
 }
 
 .leaflet-control-container {
   position: relative;
   z-index: 20;
-}
-
-@keyframes lightning-flash {
-  0%,
-  92%,
-  96%,
-  100% {
-    opacity: 0;
-  }
-  93%,
-  95% {
-    opacity: 0.85;
-  }
-}
-
-@keyframes fall {
-  from {
-    transform: translate3d(0, -10vh, 0);
-  }
-  to {
-    transform: translate3d(var(--weather-fall-drift, 0), 110vh, 0);
-  }
-}
-
-@keyframes drift {
-  from {
-    transform: translate3d(-30vw, 0, 0);
-  }
-  to {
-    transform: translate3d(110vw, 0, 0);
-  }
-}
-
-.weather-lightning {
-  animation: lightning-flash 6s steps(1, end) infinite;
-  will-change: opacity;
-}
-
-.weather-particle {
-  animation: fall var(--weather-fall-duration) linear infinite;
-  animation-delay: var(--weather-animation-delay);
-  will-change: transform;
-}
-
-.weather-cloud {
-  animation: drift var(--weather-drift-duration) linear infinite;
-  animation-delay: var(--weather-animation-delay);
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .weather-lightning,
-  .weather-particle,
-  .weather-cloud {
-    animation: none;
-  }
-
-  .weather-lightning,
-  .weather-particle {
-    display: none;
-  }
 }
 
 .map-cursor-none,

@@ -46,7 +46,7 @@ export function getFlatMeteoconName(
   weatherCode: number | null,
   isDay: number | boolean,
 ): string {
-  const isDaytime = Boolean(isDay);
+  const isDaytime = isDay === true || isDay === 1;
   const daySuffix = isDaytime ? "day" : "night";
 
   if (weatherCode === null) {
@@ -66,7 +66,7 @@ export function getFlatMeteoconName(
   }
 
   if (OVERCAST_CODES.has(weatherCode)) {
-    return "overcast";
+    return `overcast-${daySuffix}`;
   }
 
   if (FOG_CODES.has(weatherCode)) {
@@ -74,7 +74,7 @@ export function getFlatMeteoconName(
   }
 
   if (THUNDERSTORM_HAIL_CODES.has(weatherCode)) {
-    return `thunderstorms-hail-${daySuffix}`;
+    return `thunderstorms-${daySuffix}-hail`;
   }
 
   if (THUNDERSTORM_ONLY_CODES.has(weatherCode)) {
@@ -82,23 +82,23 @@ export function getFlatMeteoconName(
   }
 
   if (FREEZING_DRIZZLE_ICON_CODES.has(weatherCode)) {
-    return "sleet";
+    return `overcast-${daySuffix}-sleet`;
   }
 
   if (DRIZZLE_CODES.has(weatherCode)) {
-    return "drizzle";
+    return `overcast-${daySuffix}-drizzle`;
   }
 
   if (FREEZING_RAIN_ICON_CODES.has(weatherCode)) {
-    return "sleet";
+    return `overcast-${daySuffix}-sleet`;
   }
 
   if (RAIN_CODES.has(weatherCode)) {
-    return "rain";
+    return `overcast-${daySuffix}-rain`;
   }
 
   if (SNOW_CODES.has(weatherCode)) {
-    return "snow";
+    return `overcast-${daySuffix}-snow`;
   }
 
   return "not-available";

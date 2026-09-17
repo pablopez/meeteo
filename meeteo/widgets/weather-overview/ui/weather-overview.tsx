@@ -8,7 +8,6 @@ import type { Location } from "@/entities/location";
 import {
   getSkyState,
   WeatherEffects,
-  WeatherFlatIcon,
   type DailyForecast,
 } from "@/entities/weather";
 import { ForecastCarousel } from "@/features/browse-forecast-days";
@@ -32,35 +31,6 @@ type WeatherOverviewProps = {
   ) => void;
   isActive?: boolean;
 };
-
-const CLOUDY_WEATHER_CODES = new Set([1, 2, 3, 45, 48]);
-
-function getWeatherState(day: DailyForecast): string {
-  if (day.precipitation.isThunderstorm) {
-    return "thunderstorm";
-  }
-
-  if (day.precipitation.type === "snow") {
-    return "snow";
-  }
-
-  if (
-    day.precipitation.type === "rain" ||
-    day.precipitation.type === "drizzle" ||
-    day.precipitation.type === "hail"
-  ) {
-    return "rain";
-  }
-
-  if (
-    day.weatherCode !== null &&
-    CLOUDY_WEATHER_CODES.has(day.weatherCode)
-  ) {
-    return "cloudy";
-  }
-
-  return "clear";
-}
 
 function composeForecastDays(
   weatherDays: readonly DailyForecast[],
@@ -130,9 +100,6 @@ export function WeatherOverview({
     currentDay && sunset
       ? `${currentDay.date}T${sunset}:00Z`
       : null;
-  const weatherState = currentDay
-    ? getWeatherState(currentDay)
-    : "clear";
   const liveTime = useLiveTime(
     timezone ?? "UTC",
     i18n.resolvedLanguage ?? "en",
@@ -141,6 +108,7 @@ export function WeatherOverview({
     sunriseIso && sunsetIso
       ? getSkyState(
           liveTime.currentTime,
+          timezone ?? "UTC",
           sunriseIso,
           sunsetIso,
         )
@@ -159,16 +127,15 @@ export function WeatherOverview({
     const root = document.documentElement;
     const nextSkyState = getSkyState(
       liveTime.currentTime,
+      timezone,
       sunriseIso,
       sunsetIso,
     );
 
     root.dataset.skyState = nextSkyState;
-    root.dataset.weatherState = weatherState;
 
     return () => {
       delete root.dataset.skyState;
-      delete root.dataset.weatherState;
     };
   }, [
     isActive,
@@ -176,7 +143,6 @@ export function WeatherOverview({
     sunriseIso,
     sunsetIso,
     timezone,
-    weatherState,
   ]);
 
   if (weatherStatus === "idle") {
@@ -221,9 +187,7 @@ export function WeatherOverview({
       {isActive && currentDay && (
         <WeatherEffects
           key={`${location.id}:${currentDay.date}`}
-          precipitationType={currentDay.precipitation.type}
-          isThunderstorm={currentDay.precipitation.isThunderstorm}
-          weatherCode={currentDay.weatherCode}
+          skyState={skyState}
         />
       )}
 
@@ -232,23 +196,6 @@ export function WeatherOverview({
         data-sky-state={skyState}
         className="relative z-10"
       >
-        <div className="flex items-center gap-4">
-          <h2
-            id="weather-title"
-            className="text-2xl font-bold"
-          >
-            {t("weather.title")}
-          </h2>
-
-          {currentDay && (
-            <WeatherFlatIcon
-              wmoCode={currentDay.weatherCode}
-              isDay={isDaytime}
-              className="h-12 w-12 md:h-16 md:w-16"
-            />
-          )}
-        </div>
-
         {environmentStatus === "loading" && (
         <p className="mt-2 text-xs text-muted-foreground">
           {t("environment.loading")}
@@ -261,17 +208,18 @@ export function WeatherOverview({
         </p>
       )}
 
-      <div className="mt-4 flex justify-end">
+      {/* <div className="mt-4 flex justify-end">
         <ForecastViewSwitcher
           value={forecastView}
           onChange={setForecastView}
         />
-      </div>
+      </div> */}
 
       {forecastView === "carousel" ? (
         <ForecastCarousel
           key={locationKey}
           days={composedDays}
+          isDay={isDaytime}
         />
       ) : (
         <ForecastTable days={composedDays} />

@@ -54,6 +54,13 @@ weather: {
     drizzle: "Llovizna",
     hail: "Granizo",
   },
+  uvRisk: {
+    low: "Riesgo bajo",
+    moderate: "Riesgo moderado",
+    high: "Riesgo alto",
+    "very-high": "Riesgo muy alto",
+    extreme: "Riesgo extremo",
+  },
 },
 forecastNavigation: {
   label: "Previsión meteorológica por días",
@@ -118,6 +125,12 @@ environment: {
     label: "Polen",
     unavailable: "No hay datos de polen disponibles.",
     concentration: "{{value}} granos/m³",
+    risks: {
+      low: "Riesgo bajo",
+      moderate: "Riesgo moderado",
+      high: "Riesgo alto",
+      "very-high": "Riesgo muy alto",
+    },
     allergens: {
       alder: "Aliso",
       birch: "Abedul",

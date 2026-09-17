@@ -21,14 +21,35 @@ describe("getSkyState", () => {
     "maps %s to %s",
     (currentTime, expectedState) => {
       expect(
-        getSkyState(new Date(currentTime), sunrise, sunset),
+        getSkyState(new Date(currentTime), "UTC", sunrise, sunset),
       ).toBe(expectedState);
     },
   );
 
+  it("uses the selected city's timezone for the same instant", () => {
+    const currentTime = new Date("2026-09-17T22:00:00Z");
+
+    expect(
+      getSkyState(
+        currentTime,
+        "Asia/Shanghai",
+        "2026-09-18T05:58:00Z",
+        "2026-09-18T18:15:00Z",
+      ),
+    ).toBe("dawn");
+    expect(
+      getSkyState(
+        currentTime,
+        "Europe/Madrid",
+        "2026-09-18T07:58:00Z",
+        "2026-09-18T20:18:00Z",
+      ),
+    ).toBe("deep-night");
+  });
+
   it("rejects invalid dates", () => {
     expect(() =>
-      getSkyState(new Date("invalid"), sunrise, sunset),
+      getSkyState(new Date("invalid"), "UTC", sunrise, sunset),
     ).toThrow("Invalid sky state date");
   });
 });

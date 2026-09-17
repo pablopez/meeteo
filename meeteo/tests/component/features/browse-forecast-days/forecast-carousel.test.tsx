@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -92,13 +92,40 @@ describe("ForecastCarousel", () => {
     expect(screen.getByText("Day 1 of 2")).toBeInTheDocument();
   });
 
-  it("shows AQI and pollen when environment data is available", () => {
-    render(<ForecastCarousel days={days} />);
+  it("groups UV with AQI and shows pollen at full width", () => {
+    const { container } = render(
+      <ForecastCarousel days={days} isDay={false} />,
+    );
 
-    expect(screen.getByText("35")).toBeInTheDocument();
-    expect(screen.getByText("Fair")).toBeInTheDocument();
-    expect(screen.getByText("Olive")).toBeInTheDocument();
-    expect(screen.getByText("12 grains/m³")).toBeInTheDocument();
+    const activeSlide = container.querySelector(
+      '[aria-hidden="false"]',
+    ) as HTMLElement;
+    const active = within(activeSlide);
+    const weatherCard = active
+      .getByText("Weather forecast")
+      .closest("div.rounded-2xl");
+    const precipitationCard = active
+      .getByText("Precipitation")
+      .closest("div.rounded-2xl");
+    const uvCard = active
+      .getByText("UV index")
+      .closest("div.rounded-2xl");
+    const aqiCard = active.getByText("AQI").parentElement;
+
+    expect(weatherCard?.nextElementSibling).toBe(precipitationCard);
+    expect(uvCard?.nextElementSibling).toBe(aqiCard);
+    expect(active.getByText("Pollen").parentElement).toHaveClass(
+      "col-span-2",
+    );
+    expect(active.getByText("35")).toBeInTheDocument();
+    expect(active.getByText("Fair")).toBeInTheDocument();
+    expect(active.getByText("Olive")).toBeInTheDocument();
+    expect(active.getByText("12 grains/m³")).toBeInTheDocument();
+    expect(
+      container.querySelector(
+        'img[src="/meteocons/flat/mostly-clear-night.svg"]',
+      ),
+    ).toBeInTheDocument();
   });
 
   it("shows unavailable when environment data is null", async () => {

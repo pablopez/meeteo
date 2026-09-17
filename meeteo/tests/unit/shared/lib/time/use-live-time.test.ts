@@ -21,7 +21,7 @@ describe("useLiveTime", () => {
     expect(result.current.day).toBe("Friday");
     expect(result.current.time).toBe("21:00:00");
     expect(result.current.currentTime.toISOString()).toBe(
-      "2026-09-04T21:00:00.000Z",
+      "2026-09-04T12:00:00.000Z",
     );
     expect(result.current.separatorVisible).toBe(true);
 

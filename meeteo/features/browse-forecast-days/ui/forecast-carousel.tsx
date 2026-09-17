@@ -3,15 +3,22 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { DailyEnvironmentalConditions } from "@/entities/environment";
+import {
+  getAirQualityColorClass,
+  getAllergenMeteoconName,
+  getPollenRisk,
+  getPollenRiskMeteoconName,
+  type DailyEnvironmentalConditions,
+} from "@/entities/environment";
 import {
   PrecipitationCard,
   SunTimesCard,
   TemperatureCard,
   UvIndexCard,
+  WeatherFlatIcon,
   type DailyForecast,
 } from "@/entities/weather";
-import { Carousel, Icon } from "@/shared/ui";
+import { Card, Carousel, Icon } from "@/shared/ui";
 
 type ForecastDayView = {
   weather: DailyForecast;
@@ -20,10 +27,12 @@ type ForecastDayView = {
 
 type ForecastCarouselProps = {
   days: readonly ForecastDayView[];
+  isDay?: number | boolean;
 };
 
 export function ForecastCarousel({
   days,
+  isDay = true,
 }: ForecastCarouselProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? "en";
@@ -90,6 +99,25 @@ export function ForecastCarousel({
             className="px-2 pt-6"
           >
             <dl className="mt-4 grid grid-cols-2 gap-4">
+              <Card className="flex flex-col items-center p-4 text-center">
+                <dt className="text-sm opacity-75">
+                  {t("weather.title")}
+                </dt>
+                <dd>
+                  <WeatherFlatIcon
+                    wmoCode={weather.weatherCode}
+                    isDay={isDay}
+                    className="h-32 w-32 drop-shadow-sm"
+                  />
+                </dd>
+              </Card>
+
+              <PrecipitationCard
+                probability={weather.precipitation.probability}
+                amount={weather.precipitation.amount}
+                type={weather.precipitation.type}
+              />
+
               <TemperatureCard
                 min={
                   weather.temperature.minimum?.value ?? null
@@ -100,25 +128,19 @@ export function ForecastCarousel({
                 className="col-span-2"
               />
 
-              <PrecipitationCard
-                probability={weather.precipitation.probability}
-                amount={weather.precipitation.amount}
-                type={weather.precipitation.type}
-              />
-
               <UvIndexCard value={weather.uvIndex} />
 
-              <SunTimesCard
-                sunrise={weather.sunrise}
-                sunset={weather.sunset}
-                className="col-span-2"
-              />
-
-              <div className="rounded-xl border border-border bg-white/10 p-4 backdrop-blur-md">
+              <div className="flex flex-col items-center rounded-xl bg-transparent p-4 text-center">
                 <dt className="text-sm text-muted-foreground">
                   {t("environment.airQuality.label")}
                 </dt>
-                <dd className="mt-1 text-2xl font-semibold">
+                <dd className="mt-1 flex items-center justify-center gap-2 text-2xl font-semibold">
+                  {environment?.airQuality && (
+                    <span
+                      className={`h-3 w-3 shrink-0 rounded-full ${getAirQualityColorClass(environment.airQuality.europeanIndex)}`}
+                      aria-hidden="true"
+                    />
+                  )}
                   {environment?.airQuality
                     ? formatNumber(
                         environment.airQuality.europeanIndex,
@@ -134,30 +156,55 @@ export function ForecastCarousel({
                 )}
               </div>
 
-              <div className="rounded-xl border border-border bg-white/10 p-4 backdrop-blur-md">
-                <dt className="text-sm text-muted-foreground">
+              <SunTimesCard
+                sunrise={weather.sunrise}
+                sunset={weather.sunset}
+                className="col-span-2"
+              />
+
+              <div className="col-span-2 rounded-xl bg-transparent p-4">
+                <dt className="text-center text-sm text-muted-foreground">
                   {t("environment.allergies.label")}
                 </dt>
                 {environment &&
                 environment.allergyMeasurements.length > 0 ? (
                   <dd className="mt-1">
-                    <ul className="space-y-1 text-sm">
+                    <ul className="grid grid-cols-2 gap-3 text-sm">
                       {environment.allergyMeasurements.map(
                         (measurement) => (
                           <li
                             key={measurement.allergen}
-                            className="flex justify-between gap-2"
+                            className="flex flex-col items-center text-center"
                           >
-                            <span>
-                              {t(
-                                `environment.allergies.allergens.${measurement.allergen}`,
-                              )}
+                            <span className="relative">
+                              <img
+                                src={`/meteocons/flat/${getAllergenMeteoconName(measurement.allergen)}.svg`}
+                                alt=""
+                                loading="lazy"
+                                className="h-16 w-16 drop-shadow-sm"
+                              />
+                              <img
+                                src={`/meteocons/flat/${getPollenRiskMeteoconName(measurement.concentration)}.svg`}
+                                alt=""
+                                loading="lazy"
+                                className="absolute -bottom-1 -right-2 h-8 w-8"
+                              />
                             </span>
                             <span className="font-semibold">
                               {formatNumber(
                                 measurement.concentration,
                               )}{" "}
                               {measurement.unit}
+                            </span>
+                            <span className="text-muted-foreground">
+                              {t(
+                                `environment.allergies.allergens.${measurement.allergen}`,
+                              )}
+                            </span>
+                            <span className="text-xs font-medium">
+                              {t(
+                                `environment.allergies.risks.${getPollenRisk(measurement.concentration)}`,
+                              )}
                             </span>
                           </li>
                         ),

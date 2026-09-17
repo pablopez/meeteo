@@ -8,8 +8,8 @@ import {
 } from "@/entities/weather";
 
 describe("weather cards", () => {
-  it("renders temperature values and accepts a class name", () => {
-    render(
+  it("renders temperature values, icons and accepts a class name", () => {
+    const { container } = render(
       <dl>
         <TemperatureCard
           min={16}
@@ -21,14 +21,18 @@ describe("weather cards", () => {
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
     expect(screen.getByText("28 °C")).toBeInTheDocument();
-    expect(
-      screen.getByText("Minimum").parentElement?.parentElement,
-    ).toHaveClass(
+    expect(container.querySelector('img[src="/meteocons/flat/thermometer-colder.svg"]')).toBeInTheDocument();
+    expect(container.querySelector('img[src="/meteocons/flat/thermometer-warmer.svg"]')).toBeInTheDocument();
+    const card = screen.getByText("Minimum").parentElement?.parentElement;
+
+    expect(card).toHaveClass(
       "custom-class",
-      "bg-surface/60",
+      "bg-transparent",
+      "duration-700",
+    );
+    expect(card).not.toHaveClass(
       "border-border",
       "backdrop-blur-md",
-      "duration-700",
     );
   });
 
@@ -59,8 +63,8 @@ describe("weather cards", () => {
     expect(screen.getByText("6.2")).toBeInTheDocument();
   });
 
-  it("renders sunrise and sunset", () => {
-    render(
+  it("renders sunrise and sunset with their icons", () => {
+    const { container } = render(
       <dl>
         <SunTimesCard sunrise="07:42" sunset="20:43" />
       </dl>,
@@ -68,5 +72,7 @@ describe("weather cards", () => {
 
     expect(screen.getByText("07:42")).toBeInTheDocument();
     expect(screen.getByText("20:43")).toBeInTheDocument();
+    expect(container.querySelector('img[src="/meteocons/flat/sunrise.svg"]')).toBeInTheDocument();
+    expect(container.querySelector('img[src="/meteocons/flat/moonrise.svg"]')).toBeInTheDocument();
   });
 });

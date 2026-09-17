@@ -54,6 +54,13 @@ weather: {
     drizzle: "Drizzle",
     hail: "Hail",
   },
+  uvRisk: {
+    low: "Low risk",
+    moderate: "Moderate risk",
+    high: "High risk",
+    "very-high": "Very high risk",
+    extreme: "Extreme risk",
+  },
 },
 forecastNavigation: {
   label: "Weather forecast by day",
@@ -119,6 +126,12 @@ environment: {
     label: "Pollen",
     unavailable: "No pollen data available.",
     concentration: "{{value}} grains/m³",
+    risks: {
+      low: "Low risk",
+      moderate: "Moderate risk",
+      high: "High risk",
+      "very-high": "Very high risk",
+    },
     allergens: {
       alder: "Alder",
       birch: "Birch",

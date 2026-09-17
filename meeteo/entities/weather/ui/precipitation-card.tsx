@@ -25,7 +25,7 @@ export function PrecipitationCard({
   const unavailable = t("environment.unavailable");
 
   return (
-    <Card className={`p-4 ${className}`}>
+    <Card className={`flex flex-col items-center p-4 text-center ${className}`}>
       <dt className="text-sm opacity-75">
         {t("weather.precipitation")}
       </dt>

@@ -9,32 +9,6 @@ export type LiveTime = {
   separatorVisible: boolean;
 };
 
-function getZonedDate(now: Date, timezone: string): Date {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(now);
-  const readPart = (type: Intl.DateTimeFormatPartTypes) =>
-    Number(parts.find((part) => part.type === type)?.value);
-
-  return new Date(
-    Date.UTC(
-      readPart("year"),
-      readPart("month") - 1,
-      readPart("day"),
-      readPart("hour"),
-      readPart("minute"),
-      readPart("second"),
-    ),
-  );
-}
-
 export function useLiveTime(
   timezone: string,
   locale: string,
@@ -62,7 +36,7 @@ export function useLiveTime(
         second: "2-digit",
         hour12: false,
       }).format(now),
-      currentTime: getZonedDate(now, timezone),
+      currentTime: now,
       separatorVisible: now.getSeconds() % 2 === 0,
     }),
     [locale, now, timezone],

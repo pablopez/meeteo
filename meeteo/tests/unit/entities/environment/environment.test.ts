@@ -3,10 +3,53 @@ import {
   createAllergyMeasurement,
   createDailyEnvironmentalConditions,
   createEnvironmentForecast,
+  getAirQualityColorClass,
+  getAllergenMeteoconName,
+  getPollenRisk,
+  getPollenRiskMeteoconName,
   type AirQualityLevel,
 } from "@/entities/environment";
 
 describe("environment domain", () => {
+  describe("visual mappings", () => {
+    it.each([
+      [0, "bg-green-500"],
+      [50, "bg-green-500"],
+      [51, "bg-yellow-500"],
+      [101, "bg-orange-500"],
+      [151, "bg-red-500"],
+      [201, "bg-slate-900"],
+    ] as const)("maps ICA %s to %s", (index, expectedClass) => {
+      expect(getAirQualityColorClass(index)).toBe(expectedClass);
+    });
+
+    it.each([
+      ["alder", "pollen-tree"],
+      ["birch", "pollen-tree"],
+      ["olive", "pollen-tree"],
+      ["grass", "pollen-grass"],
+      ["mugwort", "pollen-flower"],
+      ["ragweed", "pollen-flower"],
+    ] as const)("maps %s to %s", (allergen, expectedIcon) => {
+      expect(getAllergenMeteoconName(allergen)).toBe(expectedIcon);
+    });
+
+    it.each([
+      [0, "low", "code-green"],
+      [10, "moderate", "code-yellow"],
+      [50, "high", "code-orange"],
+      [100, "very-high", "code-red"],
+    ] as const)(
+      "maps pollen concentration %s to %s",
+      (concentration, expectedRisk, expectedIcon) => {
+        expect(getPollenRisk(concentration)).toBe(expectedRisk);
+        expect(getPollenRiskMeteoconName(concentration)).toBe(
+          expectedIcon,
+        );
+      },
+    );
+  });
+
   describe("createAirQuality", () => {
     it.each<[number, AirQualityLevel]>([
       [0, "good"],
