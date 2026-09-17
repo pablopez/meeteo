@@ -41,14 +41,24 @@ function MapControls() {
   const map = useMap();
 
   const buttonClassName =
-    "z-40 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface/80 text-foreground backdrop-blur-sm transition-colors hover:bg-surface";
+    "z-[1000] flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface text-foreground transition-colors hover:bg-surface-muted";
+
+  function handleButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>,
+    action: () => void,
+  ) {
+    event.stopPropagation();
+    action();
+  }
 
   return (
     <>
       <button
         type="button"
         aria-label={t("mapSelector.zoomIn")}
-        onClick={() => map.zoomIn()}
+        onClick={(event) =>
+          handleButtonClick(event, () => map.zoomIn())
+        }
         className={`${buttonClassName} absolute right-14 top-4`}
       >
         <span className="text-lg font-bold leading-none">
@@ -59,7 +69,9 @@ function MapControls() {
       <button
         type="button"
         aria-label={t("mapSelector.zoomOut")}
-        onClick={() => map.zoomOut()}
+        onClick={(event) =>
+          handleButtonClick(event, () => map.zoomOut())
+        }
         className={`${buttonClassName} absolute right-4 top-4`}
       >
         <span className="text-lg font-bold leading-none">
@@ -70,8 +82,10 @@ function MapControls() {
       <button
         type="button"
         aria-label={t("mapSelector.panUp")}
-        onClick={() =>
-          map.panBy([0, PAN_OFFSET])
+        onClick={(event) =>
+          handleButtonClick(event, () =>
+            map.panBy([0, PAN_OFFSET]),
+          )
         }
         className={`${buttonClassName} absolute left-1/2 top-4 -translate-x-1/2`}
       >
@@ -81,8 +95,10 @@ function MapControls() {
       <button
         type="button"
         aria-label={t("mapSelector.panDown")}
-        onClick={() =>
-          map.panBy([0, -PAN_OFFSET])
+        onClick={(event) =>
+          handleButtonClick(event, () =>
+            map.panBy([0, -PAN_OFFSET]),
+          )
         }
         className={`${buttonClassName} absolute bottom-4 left-1/2 -translate-x-1/2`}
       >
@@ -92,8 +108,10 @@ function MapControls() {
       <button
         type="button"
         aria-label={t("mapSelector.panLeft")}
-        onClick={() =>
-          map.panBy([PAN_OFFSET, 0])
+        onClick={(event) =>
+          handleButtonClick(event, () =>
+            map.panBy([PAN_OFFSET, 0]),
+          )
         }
         className={`${buttonClassName} absolute left-4 top-1/2 -translate-y-1/2`}
       >
@@ -103,8 +121,10 @@ function MapControls() {
       <button
         type="button"
         aria-label={t("mapSelector.panRight")}
-        onClick={() =>
-          map.panBy([-PAN_OFFSET, 0])
+        onClick={(event) =>
+          handleButtonClick(event, () =>
+            map.panBy([-PAN_OFFSET, 0]),
+          )
         }
         className={`${buttonClassName} absolute right-4 top-1/2 -translate-y-1/2`}
       >
@@ -124,6 +144,7 @@ export function MapSelector({
       minZoom={2}
       className="h-full w-full"
       worldCopyJump
+      zoomControl={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

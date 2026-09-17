@@ -166,7 +166,7 @@ body {
 
 .leaflet-control-container {
   position: relative;
-  z-index: 20;
+  z-index: 1000;
 }
 
 .map-cursor-none,
