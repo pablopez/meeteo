@@ -24,6 +24,7 @@ type WeatherOverviewProps = {
     timezone: string,
   ) => void;
   isActive?: boolean;
+  onDaytimeChange?: (locationId: string, isDaytime: boolean) => void;
 };
 
 function composeForecastDays(
@@ -52,6 +53,7 @@ export function WeatherOverview({
   location,
   onTimezoneChange,
   isActive = true,
+  onDaytimeChange,
 }: WeatherOverviewProps) {
   const { t, i18n } = useTranslation();
 
@@ -111,6 +113,12 @@ export function WeatherOverview({
     skyState === "day" ||
     skyState === "dusk";
 
+  useEffect(() => {
+    if (location && weatherForecast && isActive) {
+      onDaytimeChange?.(location.id, isDaytime);
+    }
+  }, [isActive, isDaytime, location, onDaytimeChange, weatherForecast]);
+
   if (weatherStatus === "idle") {
     return (
       <p className="text-sm text-white/70">
@@ -159,7 +167,7 @@ export function WeatherOverview({
 
       <Panel
         aria-labelledby="weather-title"
-        className="relative z-10"
+        className="relative z-10 w-full min-w-0 max-w-full"
       >
         {environmentStatus === "loading" && (
         <p className="mt-2 text-xs text-white/70">

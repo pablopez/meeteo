@@ -20,7 +20,15 @@ import {
   WeatherFlatIcon,
   type DailyForecast,
 } from "@/entities/weather";
-import { Card, Carousel, Icon } from "@/shared/ui";
+import { Card, Carousel } from "@/shared/ui";
+
+function formatShortDate(date: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00Z`));
+}
 
 type ForecastDayView = {
   weather: DailyForecast;
@@ -62,32 +70,44 @@ export function ForecastCarousel({
     }).format(value);
 
   return (
-    <section aria-label={t("forecastNavigation.label")}>
-      <div className="flex items-center justify-between gap-4 px-2 pt-6">
-        <button
-          type="button"
-          disabled={currentIndex === 0}
-          onClick={() => setSelectedIndex(currentIndex - 1)}
-          aria-label={t("forecastNavigation.previous")}
-          className="rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          <Icon name="chevron-left" />
-        </button>
+    <section
+      aria-label={t("forecastNavigation.label")}
+      className="w-full min-w-0 max-w-full"
+    >
+      <nav
+        className="grid min-w-0 grid-cols-2 items-center gap-3 pt-6 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
+        aria-label={t("forecastNavigation.label")}
+      >
+        {currentIndex > 0 ? (
+          <button
+            type="button"
+            onClick={() => setSelectedIndex(currentIndex - 1)}
+            aria-label={t("forecastNavigation.previous")}
+            className="min-w-0 truncate rounded-full border border-white/20 bg-white/10 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/20"
+          >
+            {formatShortDate(days[currentIndex - 1].weather.date, locale)}
+          </button>
+        ) : (
+          <span className="min-w-0" />
+        )}
 
-        <h3 className="text-center text-lg font-semibold capitalize">
+        <h3 className="order-first col-span-2 min-w-0 truncate rounded-full border border-white/40 bg-white/20 px-3 py-2 text-center text-base font-semibold capitalize backdrop-blur-md sm:order-none sm:col-span-1 sm:px-5 sm:text-lg">
           {formattedDate}
         </h3>
 
-        <button
-          type="button"
-          disabled={currentIndex === days.length - 1}
-          onClick={() => setSelectedIndex(currentIndex + 1)}
-          aria-label={t("forecastNavigation.next")}
-          className="rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          <Icon name="chevron-right" />
-        </button>
-      </div>
+        {currentIndex < days.length - 1 ? (
+          <button
+            type="button"
+            onClick={() => setSelectedIndex(currentIndex + 1)}
+            aria-label={t("forecastNavigation.next")}
+            className="min-w-0 truncate rounded-full border border-white/20 bg-white/10 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/20"
+          >
+            {formatShortDate(days[currentIndex + 1].weather.date, locale)}
+          </button>
+        ) : (
+          <span className="min-w-0" />
+        )}
+      </nav>
 
       <Carousel
         items={days}
@@ -127,8 +147,9 @@ export function ForecastCarousel({
               </Card>
 
               <PrecipitationCard
+                isDay={isDay}
                 probability={weather.precipitation.probability}
-                amount={weather.precipitation.amount}
+                precipitation={weather.precipitation.amount}
                 type={weather.precipitation.type}
               />
 

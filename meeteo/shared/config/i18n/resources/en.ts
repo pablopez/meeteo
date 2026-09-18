@@ -87,6 +87,9 @@ location: {
   error: "We could not get your location. Check your browser permissions.",
   attribution: "Location data © OpenStreetMap contributors",
   overviewLabel: "Location overview",
+  carouselLabel: "City carousel",
+  previousCity: "Previous city: {{city}}",
+  nextCity: "Next city: {{city}}",
 },
 common: {
   confirm: "Confirm",

@@ -12,22 +12,12 @@ import { useTranslation } from "react-i18next";
 import { reverseGeocode } from "@/entities/city";
 import type { City } from "@/entities/city";
 import { getCurrentLocation } from "@/entities/location";
-import type { Location } from "@/entities/location";
 import { useFavoriteCities } from "@/features/favorite-cities";
 import { useSelectedCity } from "@/features/select-city";
 import { Carousel } from "@/shared/ui";
 import { AppMenu, type PanelKey } from "@/widgets/app-menu";
-import { LocationOverview } from "@/widgets/location-overview";
+import { CityCarouselHeader } from "@/widgets/city-carousel-header";
 import { WeatherOverview } from "@/widgets/weather-overview";
-
-function isCity(
-  location: Location | null,
-): location is City {
-  return (
-    location !== null &&
-    typeof (location as City).name === "string"
-  );
-}
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -39,6 +29,9 @@ export function HomePage() {
     useState<string | null>(null);
   const [timezones, setTimezones] = useState<
     Record<string, string>
+  >({});
+  const [daytimeByLocation, setDaytimeByLocation] = useState<
+    Record<string, boolean>
   >({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenuPanel, setActiveMenuPanel] =
@@ -70,8 +63,8 @@ export function HomePage() {
       });
   }, [favorites, selectedCity, selectCity]);
 
-  const carouselItems = useMemo<Location[]>(() => {
-    const items: Location[] = [];
+  const carouselItems = useMemo<City[]>(() => {
+    const items: City[] = [];
 
     if (favorites.length > 0) {
       items.push(...favorites);
@@ -119,6 +112,27 @@ export function HomePage() {
     }
   }
 
+  function handleGoToCity(index: number) {
+    const city = carouselItems[index];
+
+    if (city) {
+      setActiveLocationId(city.id);
+    }
+  }
+
+  function handlePreviousCity() {
+    handleGoToCity(
+      (activeIndex - 1 + carouselItems.length) %
+        carouselItems.length,
+    );
+  }
+
+  function handleNextCity() {
+    handleGoToCity(
+      (activeIndex + 1) % carouselItems.length,
+    );
+  }
+
   const handleTimezoneChange = useCallback(
     (locationId: string, timezone: string) => {
       setTimezones((current) =>
@@ -130,20 +144,27 @@ export function HomePage() {
     [],
   );
 
-  function getLocationLabel(
-    location: Location | null,
-  ): string | null {
-    if (!location) {
-      return null;
-    }
+  const handleDaytimeChange = useCallback(
+    (locationId: string, isDaytime: boolean) => {
+      setDaytimeByLocation((current) =>
+        current[locationId] === isDaytime
+          ? current
+          : { ...current, [locationId]: isDaytime },
+      );
+    },
+    [],
+  );
 
-    return isCity(location)
-      ? location.name
-      : t("location.current");
-  }
+  const activeLocation = carouselItems[activeIndex];
+  const isDaytime = activeLocation
+    ? daytimeByLocation[activeLocation.id] ?? true
+    : true;
 
   return (
-    <>
+    <div
+      data-weather-theme={isDaytime ? "day" : "night"}
+      className={isDaytime ? "weather-theme-day" : "weather-theme-night"}
+    >
       <AppMenu
         isOpen={isMenuOpen}
         activePanel={activeMenuPanel}
@@ -153,8 +174,8 @@ export function HomePage() {
         onCityLocated={handleCityLocated}
       />
 
-      <main className="min-h-screen w-full bg-transparent text-white">
-        <section className="mx-auto">
+      <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-transparent text-white">
+        <section className="mx-auto w-full min-w-0 max-w-full">
           <header className="sr-only">
             <h1 className="text-3xl font-bold">
               {t("home.title")}
@@ -167,36 +188,40 @@ export function HomePage() {
 
           <div className="mt-8">
             {carouselItems.length > 0 ? (
-              <Carousel
-                items={carouselItems}
-                getItemId={(item) => item.id}
-                currentIndex={activeIndex}
-                onChange={handleCarouselChange}
-                paginationVariant="dots"
-                renderItem={(location, index) => (
-                  <div className="space-y-8">
-                    <LocationOverview
-                      location={location}
-                      locationLabel={getLocationLabel(
-                        location,
-                      )}
-                      timezone={timezones[location.id] ?? null}
-                    />
+              <section aria-label={t("location.overviewLabel")}>
+                <CityCarouselHeader
+                  cities={carouselItems}
+                  currentIndex={activeIndex}
+                  timezones={timezones}
+                  onPrevious={handlePreviousCity}
+                  onNext={handleNextCity}
+                />
 
-                    <WeatherOverview
-                      location={location}
-                      onTimezoneChange={handleTimezoneChange}
-                      isActive={index === activeIndex}
-                    />
-                  </div>
-                )}
-              />
+                <Carousel
+                  items={carouselItems}
+                  getItemId={(item) => item.id}
+                  currentIndex={activeIndex}
+                  onChange={handleCarouselChange}
+                  paginationVariant="hidden"
+                  showNavigation={false}
+                  renderItem={(location, index) => (
+                    <div className="space-y-8 pt-6">
+                      <WeatherOverview
+                        location={location}
+                        onTimezoneChange={handleTimezoneChange}
+                        onDaytimeChange={handleDaytimeChange}
+                        isActive={index === activeIndex}
+                      />
+                    </div>
+                  )}
+                />
+              </section>
             ) : (
               <WeatherOverview location={null} />
             )}
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

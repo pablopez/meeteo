@@ -86,6 +86,9 @@ location: {
   error: "No pudimos obtener tu ubicación. Revisa los permisos del navegador.",
   attribution: "Datos de localización © colaboradores de OpenStreetMap",
   overviewLabel: "Resumen de la ubicación",
+  carouselLabel: "Carrusel de ciudades",
+  previousCity: "Ciudad anterior: {{city}}",
+  nextCity: "Ciudad siguiente: {{city}}",
 },
 common: {
   confirm: "Confirmar",

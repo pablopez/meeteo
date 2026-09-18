@@ -10,6 +10,15 @@ jest.mock("@/entities/location", () => ({
   getCurrentLocation: jest.fn(),
 }));
 
+jest.mock("@/shared/lib/time/use-live-time", () => ({
+  useLiveTime: jest.fn(() => ({
+    day: "Friday",
+    time: "12:00:00",
+    currentTime: new Date("2026-09-04T12:00:00Z"),
+    separatorVisible: true,
+  })),
+}));
+
 const mockedGetCurrentLocation =
   jest.mocked(getCurrentLocation);
 
@@ -154,6 +163,88 @@ describe("HomePage", () => {
       await screen.findByLabelText(
         "Search for a city or town",
       ),
+    ).toBeInTheDocument();
+  });
+
+  it("shows adjacent cities in the circular city carousel header", () => {
+    const madrid = {
+      id: "madrid",
+      name: "Madrid",
+      countryCode: "ES",
+      region: "Comunidad de Madrid",
+      coordinates: { latitude: 40.4165, longitude: -3.7026 },
+      isFavorite: true,
+    };
+    const tokyo = {
+      id: "tokyo",
+      name: "Tokyo",
+      countryCode: "JP",
+      region: "Tokyo",
+      coordinates: { latitude: 35.6762, longitude: 139.6503 },
+      isFavorite: true,
+    };
+
+    window.localStorage.setItem(
+      "meeteo:favorite-cities",
+      JSON.stringify([madrid, tokyo]),
+    );
+
+    renderHomePage({ withDefaultCity: false });
+
+    expect(
+      screen.getByRole("button", {
+        name: "Previous city: Tokyo",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: "Next city: Tokyo",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Madrid" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Comunidad de Madrid, ES"),
+    ).toBeInTheDocument();
+  });
+
+  it("navigates to the next city when clicking the next city button", async () => {
+    const user = userEvent.setup();
+
+    const madrid = {
+      id: "madrid",
+      name: "Madrid",
+      countryCode: "ES",
+      region: "Comunidad de Madrid",
+      coordinates: { latitude: 40.4165, longitude: -3.7026 },
+      isFavorite: true,
+    };
+    const tokyo = {
+      id: "tokyo",
+      name: "Tokyo",
+      countryCode: "JP",
+      region: "Tokyo",
+      coordinates: { latitude: 35.6762, longitude: 139.6503 },
+      isFavorite: true,
+    };
+
+    window.localStorage.setItem(
+      "meeteo:favorite-cities",
+      JSON.stringify([madrid, tokyo]),
+    );
+
+    renderHomePage({ withDefaultCity: false });
+
+    await user.click(
+      screen.getByRole("button", { name: "Next city: Tokyo" }),
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Tokyo" }),
     ).toBeInTheDocument();
   });
 });

@@ -38,8 +38,9 @@ describe("weather cards", () => {
     render(
       <dl>
         <PrecipitationCard
+          isDay={true}
           probability={75}
-          amount={3.5}
+          precipitation={3.5}
           type="rain"
         />
       </dl>,

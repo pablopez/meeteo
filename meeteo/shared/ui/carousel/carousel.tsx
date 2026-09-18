@@ -116,7 +116,7 @@ export function Carousel<T>({
   return (
     <section
       aria-roledescription="carousel"
-      className="relative"
+      className="relative min-w-0 w-full max-w-full"
     >
       <div
         ref={containerRef}
@@ -125,7 +125,7 @@ export function Carousel<T>({
         className="touch-pan-y overflow-hidden"
       >
         <div
-          className="flex transition-transform duration-300 ease-out"
+          className="flex w-full min-w-0 transition-transform duration-300 ease-out"
           style={{
             transform: `translateX(-${currentIndex * 100}%)`,
           }}
@@ -133,7 +133,7 @@ export function Carousel<T>({
           {items.map((item, index) => (
             <div
               key={getItemId(item)}
-              className="w-full shrink-0"
+              className="w-full min-w-0 max-w-full shrink-0"
               aria-hidden={index !== currentIndex}
             >
               {renderItem(item, index)}

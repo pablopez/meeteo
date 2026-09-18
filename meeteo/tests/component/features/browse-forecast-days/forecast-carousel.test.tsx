@@ -56,15 +56,14 @@ describe("ForecastCarousel", () => {
 
     render(<ForecastCarousel days={days} />);
 
-    const previousButton = screen.getByRole("button", {
-      name: "Previous day",
-    });
+    expect(
+      screen.queryByRole("button", { name: "Previous day" }),
+    ).not.toBeInTheDocument();
 
     const nextButton = screen.getByRole("button", {
       name: "Next day",
     });
 
-    expect(previousButton).toBeDisabled();
     expect(
       screen.getByRole("heading", {
         name: "Friday, September 4",
@@ -85,7 +84,13 @@ describe("ForecastCarousel", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("14 °C")).toBeInTheDocument();
     expect(screen.getByText("24 °C")).toBeInTheDocument();
-    expect(nextButton).toBeDisabled();
+    expect(
+      screen.queryByRole("button", { name: "Next day" }),
+    ).not.toBeInTheDocument();
+
+    const previousButton = screen.getByRole("button", {
+      name: "Previous day",
+    });
 
     await user.click(previousButton);
 
@@ -123,7 +128,7 @@ describe("ForecastCarousel", () => {
     expect(active.getByText("12 grains/m³")).toBeInTheDocument();
     expect(
       container.querySelector(
-        'img[src="/meteocons/flat/mostly-clear-night.svg"]',
+        'img[src="/meteocons/monochrome/mostly-clear-night.svg"]',
       ),
     ).toBeInTheDocument();
   });
