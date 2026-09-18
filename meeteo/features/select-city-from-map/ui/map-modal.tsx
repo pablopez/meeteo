@@ -56,7 +56,7 @@ export function MapModal({
       role="dialog"
       aria-modal="true"
       aria-label={t("mapSelector.dialogLabel")}
-      className="fixed inset-0 z-[100] bg-background"
+      className="fixed inset-0 z-[100] bg-black/80"
     >
       <MapSelector onLocationSelect={onLocationSelect} />
 
@@ -65,7 +65,7 @@ export function MapModal({
         onClick={onClose}
         disabled={isLoading}
         aria-label={t("mapSelector.close")}
-        className="absolute right-4 top-[calc(1rem+env(safe-area-inset-top))] z-[110] rounded-full border border-border bg-surface px-4 py-2 font-medium text-foreground disabled:cursor-wait disabled:opacity-60"
+        className="absolute right-4 top-[calc(1rem+env(safe-area-inset-top))] z-[110] rounded-full border border-white/20 bg-white/10 px-4 py-2 font-medium text-white backdrop-blur-md disabled:cursor-wait disabled:opacity-60"
       >
         {t("mapSelector.close")}
       </button>
@@ -73,9 +73,9 @@ export function MapModal({
       {isLoading && (
         <div
           role="status"
-          className="absolute inset-0 z-[105] grid place-items-center bg-background/60"
+          className="absolute inset-0 z-[105] grid place-items-center bg-black/60 backdrop-blur-sm"
         >
-          <span className="rounded-xl border border-border bg-surface px-5 py-3 font-medium">
+          <span className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 font-medium text-white backdrop-blur-md">
             {t("mapSelector.loading")}
           </span>
         </div>

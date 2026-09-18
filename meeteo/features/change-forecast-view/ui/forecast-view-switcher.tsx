@@ -20,10 +20,10 @@ export function ForecastViewSwitcher({
       "rounded-lg px-4 py-2 text-sm font-medium transition-colors";
 
     if (value === view) {
-      return `${commonClassName} bg-primary text-primary-foreground`;
+      return `${commonClassName} bg-white/30 text-white`;
     }
 
-    return `${commonClassName} border border-border bg-surface text-foreground`;
+    return `${commonClassName} border border-white/20 bg-white/10 text-white hover:bg-white/20`;
   }
 
   return (

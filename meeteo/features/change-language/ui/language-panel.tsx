@@ -49,10 +49,10 @@ export function LanguagePanel() {
             onClick={() => handleSelect(language)}
             aria-pressed={currentLanguage === language}
             className={[
-              "flex items-center gap-3 rounded-xl border border-border p-3 transition-colors",
+              "flex items-center gap-3 rounded-xl border border-white/20 p-3 backdrop-blur-md transition-colors",
               currentLanguage === language
-                ? "bg-primary text-primary-foreground"
-                : "bg-surface/60 text-foreground hover:bg-surface/80",
+                ? "bg-white/30 text-white"
+                : "bg-white/10 text-white hover:bg-white/20",
             ].join(" ")}
           >
             <span

@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 
 import type { City } from "@/entities/city";
 import { LanguagePanel } from "@/features/change-language";
-import { ThemeSwitcher } from "@/features/change-theme";
 import { useFavoriteCities } from "@/features/favorite-cities";
 import { LocateUserButton } from "@/features/locate-user";
 import { CitySearch } from "@/features/search-city";
@@ -30,8 +29,7 @@ export type PanelKey =
   | "search"
   | "map"
   | "language"
-  | "favorites"
-  | "theme";
+  | "favorites";
 
 type AppMenuProps = {
   isOpen: boolean;
@@ -174,7 +172,7 @@ export function AppMenu({
           role="dialog"
           aria-modal="true"
           aria-labelledby="app-menu-title"
-          className="fixed inset-0 z-40 overflow-y-auto bg-background"
+          className="fixed inset-0 z-40 overflow-y-auto bg-black/80 backdrop-blur-xl"
         >
           <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-6 pb-6 pt-24">
             <h2
@@ -233,15 +231,6 @@ export function AppMenu({
                     togglePanel("favorites")
                   }
                 />
-
-                <MenuSquareButton
-                  icon="theme"
-                  label={t("menu.theme")}
-                  active={activePanel === "theme"}
-                  onClick={() =>
-                    togglePanel("theme")
-                  }
-                />
               </section>
 
               {activePanel === "search" && (
@@ -265,16 +254,10 @@ export function AppMenu({
               {activePanel === "favorites" && (
                 <FavoritesPanel />
               )}
-
-              {activePanel === "theme" && (
-                <Panel aria-label={t("theme.label")}>
-                  <ThemeSwitcher />
-                </Panel>
-              )}
             </div>
 
-            <footer className="mt-auto border-t border-border pt-6 text-sm text-muted-foreground">
-              <h3 className="mb-3 font-semibold text-foreground">
+            <footer className="mt-auto border-t border-white/20 pt-6 text-sm text-white/70">
+              <h3 className="mb-3 font-semibold text-white">
                 {t("menu.dataSources")}
               </h3>
 

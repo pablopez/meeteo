@@ -19,24 +19,24 @@ export function FavoriteCityItem({
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface p-3">
+    <div className="flex items-center justify-between gap-3 rounded-lg border border-white/20 bg-white/10 p-3 backdrop-blur-md">
       <button
         type="button"
         onClick={() => onSelect(city)}
         className="min-w-0 flex-1 text-left"
       >
-        <span className="block truncate font-medium">
+        <span className="block truncate font-medium text-white">
           {city.name}
         </span>
 
         {city.region && (
-          <span className="block truncate text-sm text-muted-foreground">
+          <span className="block truncate text-sm text-white/70">
             {city.region}, {city.countryCode}
           </span>
         )}
 
         {!city.region && (
-          <span className="block truncate text-sm text-muted-foreground">
+          <span className="block truncate text-sm text-white/70">
             {city.countryCode}
           </span>
         )}

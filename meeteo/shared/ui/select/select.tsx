@@ -66,7 +66,7 @@ export const Select = forwardRef<
       .filter(Boolean)
       .join(" ")}
         >
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-white/70">
         {label}
       </span>
 
@@ -83,7 +83,7 @@ export const Select = forwardRef<
     <Icon
       name={icon}
       size="sm"
-      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
     />
   )}
 
@@ -93,12 +93,12 @@ export const Select = forwardRef<
     id={selectId}
     className={[
       "appearance-none rounded-lg",
-      "border border-border bg-surface",
-      "py-2 pr-9 text-sm text-foreground",
+      "border border-white/20 bg-white/10",
+      "py-2 pr-9 text-sm text-white",
       icon ? "pl-9" : "pl-3",
       fullWidth && "w-full",
-      "outline-none transition-colors",
-      "focus:border-primary focus:ring-2 focus:ring-primary/20",
+      "outline-none transition-colors backdrop-blur-md",
+      "focus:border-white/50 focus:ring-2 focus:ring-white/20",
       "disabled:cursor-not-allowed disabled:opacity-60",
       className,
     ]
@@ -119,14 +119,14 @@ export const Select = forwardRef<
   <Icon
     name="chevron-down"
     size="sm"
-    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
   />
 </span>
 
         <Icon
           name="chevron-down"
           size="sm"
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
         />
       </span>
     </label>

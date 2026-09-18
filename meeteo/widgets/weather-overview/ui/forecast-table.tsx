@@ -11,6 +11,7 @@ import {
 } from "@/entities/environment";
 import {
   formatWeatherMeasurement,
+  MeteoconIcon,
   WeatherFlatIcon,
   type DailyForecast,
 } from "@/entities/weather";
@@ -22,10 +23,12 @@ type ForecastDayView = {
 
 type ForecastTableProps = {
   days: readonly ForecastDayView[];
+  isDay?: boolean | number;
 };
 
 export function ForecastTable({
   days,
+  isDay = true,
 }: ForecastTableProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? "en";
@@ -53,7 +56,7 @@ export function ForecastTable({
         </caption>
 
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-white/20">
             <th scope="col" className="px-3 py-3">
               {t("forecastTable.date")}
             </th>
@@ -94,7 +97,7 @@ export function ForecastTable({
           {days.map(({ weather, environment }) => (
             <tr
               key={weather.date}
-              className="border-b border-border last:border-0"
+              className="border-b border-white/20 last:border-0"
             >
               <th
                 scope="row"
@@ -134,7 +137,7 @@ export function ForecastTable({
                 <div className="flex items-center gap-2">
                   <WeatherFlatIcon
                     wmoCode={weather.weatherCode}
-                    isDay={true}
+                    isDay={isDay}
                     className="h-10 w-10"
                   />
 
@@ -147,7 +150,7 @@ export function ForecastTable({
                     )}
                   </span>
 
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-sm text-white/70">
                     {t(
                       `weather.precipitationTypes.${weather.precipitation.type}`,
                     )}
@@ -205,16 +208,16 @@ export function ForecastTable({
                           className="flex items-center gap-2"
                         >
                           <span className="relative shrink-0">
-                            <img
-                              src={`/meteocons/flat/${getAllergenMeteoconName(measurement.allergen)}.svg`}
+                            <MeteoconIcon
+                              name={getAllergenMeteoconName(measurement.allergen)}
+                              isDay={isDay}
                               alt=""
-                              loading="lazy"
                               className="h-10 w-10"
                             />
-                            <img
-                              src={`/meteocons/flat/${getPollenRiskMeteoconName(measurement.concentration)}.svg`}
+                            <MeteoconIcon
+                              name={getPollenRiskMeteoconName(measurement.concentration)}
+                              isDay={isDay}
                               alt=""
-                              loading="lazy"
                               className="absolute -bottom-1 -right-1 h-5 w-5"
                             />
                           </span>
@@ -229,7 +232,7 @@ export function ForecastTable({
                               )}{" "}
                               {measurement.unit}
                             </span>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-white/70">
                               {t(
                                 `environment.allergies.risks.${getPollenRisk(measurement.concentration)}`,
                               )}
@@ -240,7 +243,7 @@ export function ForecastTable({
                     )}
                   </ul>
                 ) : (
-                  <span className="text-muted-foreground">
+                  <span className="text-white/70">
                     {unavailable}
                   </span>
                 )}

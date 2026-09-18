@@ -1,4 +1,5 @@
 import { getFlatMeteoconName } from "../lib/wmo-mapper";
+import { MeteoconIcon } from "./meteocon-icon";
 
 type WeatherFlatIconProps = {
   wmoCode: number | null;
@@ -14,10 +15,10 @@ export function WeatherFlatIcon({
   const iconName = getFlatMeteoconName(wmoCode, isDay);
 
   return (
-    <img
-      src={`/meteocons/flat/${iconName}.svg`}
+    <MeteoconIcon
+      name={iconName}
+      isDay={isDay}
       alt="Weather icon"
-      loading="lazy"
       className={className}
     />
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import type { DailyEnvironmentalConditions } from "@/entities/environment";
@@ -13,16 +13,10 @@ import {
 import { ForecastCarousel } from "@/features/browse-forecast-days";
 import { useLiveTime } from "@/shared/lib/time/use-live-time";
 import { Panel } from "@/shared/ui";
-import {
-  ForecastViewSwitcher,
-  type ForecastView,
-} from "@/features/change-forecast-view";
 
 import type { ForecastDayView } from "../model/forecast-day-view";
 import { useEnvironmentForecast } from "../model/use-environment-forecast";
 import { useWeatherForecast } from "../model/use-weather-forecast";
-import { ForecastTable } from "./forecast-table";
-
 type WeatherOverviewProps = {
   location: Location | null;
   onTimezoneChange?: (
@@ -60,8 +54,6 @@ export function WeatherOverview({
   isActive = true,
 }: WeatherOverviewProps) {
   const { t, i18n } = useTranslation();
-  const [forecastView, setForecastView] =
-    useState<ForecastView>("carousel");
 
   const { status: weatherStatus, forecast: weatherForecast } =
     useWeatherForecast(location);
@@ -119,35 +111,9 @@ export function WeatherOverview({
     skyState === "day" ||
     skyState === "dusk";
 
-  useEffect(() => {
-    if (!isActive || !timezone || !sunriseIso || !sunsetIso) {
-      return;
-    }
-
-    const root = document.documentElement;
-    const nextSkyState = getSkyState(
-      liveTime.currentTime,
-      timezone,
-      sunriseIso,
-      sunsetIso,
-    );
-
-    root.dataset.skyState = nextSkyState;
-
-    return () => {
-      delete root.dataset.skyState;
-    };
-  }, [
-    isActive,
-    liveTime.currentTime,
-    sunriseIso,
-    sunsetIso,
-    timezone,
-  ]);
-
   if (weatherStatus === "idle") {
     return (
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-white/70">
         {t("weather.empty")}
       </p>
     );
@@ -157,7 +123,7 @@ export function WeatherOverview({
     return (
       <p
         role="status"
-        className="text-sm text-muted-foreground"
+        className="text-sm text-white/70"
       >
         {t("weather.loading")}
       </p>
@@ -170,7 +136,7 @@ export function WeatherOverview({
     !location
   ) {
     return (
-      <p role="alert" className="text-sm text-danger">
+      <p role="alert" className="text-sm text-white">
         {t("weather.error")}
       </p>
     );
@@ -187,46 +153,34 @@ export function WeatherOverview({
       {isActive && currentDay && (
         <WeatherEffects
           key={`${location.id}:${currentDay.date}`}
-          skyState={skyState}
+          isDay={isDaytime}
         />
       )}
 
       <Panel
         aria-labelledby="weather-title"
-        data-sky-state={skyState}
         className="relative z-10"
       >
         {environmentStatus === "loading" && (
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="mt-2 text-xs text-white/70">
           {t("environment.loading")}
         </p>
       )}
 
       {environmentStatus === "error" && (
-        <p className="mt-2 text-xs text-danger">
+        <p className="mt-2 text-xs text-white">
           {t("environment.error")}
         </p>
       )}
 
-      {/* <div className="mt-4 flex justify-end">
-        <ForecastViewSwitcher
-          value={forecastView}
-          onChange={setForecastView}
-        />
-      </div> */}
+      <ForecastCarousel
+        key={locationKey}
+        days={composedDays}
+        isDay={isDaytime}
+        currentTemperature={weatherForecast.currentTemperature}
+      />
 
-      {forecastView === "carousel" ? (
-        <ForecastCarousel
-          key={locationKey}
-          days={composedDays}
-          isDay={isDaytime}
-          currentTemperature={weatherForecast.currentTemperature}
-        />
-      ) : (
-        <ForecastTable days={composedDays} />
-      )}
-
-      <p className="mt-6 text-xs text-muted-foreground">
+      <p className="mt-6 text-xs text-white/70">
         <Trans
           i18nKey="environment.attribution"
           components={{

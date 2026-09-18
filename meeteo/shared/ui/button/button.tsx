@@ -41,13 +41,13 @@ const VARIANT_CLASS_NAMES: Record<
   string
 > = {
   primary:
-    "bg-primary text-primary-foreground hover:opacity-90",
+    "bg-white/20 text-white hover:bg-white/30",
   secondary:
-    "border border-border bg-surface text-foreground hover:bg-surface-muted",
+    "border border-white/20 bg-white/10 text-white hover:bg-white/20",
   ghost:
-    "bg-transparent text-foreground hover:bg-surface-muted",
+    "bg-transparent text-white hover:bg-white/10",
   danger:
-    "bg-danger text-white hover:opacity-90",
+    "bg-red-500/80 text-white hover:bg-red-500/90",
 };
 
 const SIZE_CLASS_NAMES: Record<ButtonSize, string> = {
@@ -98,7 +98,7 @@ export function Button({
       className={[
         "inline-flex items-center rounded-lg font-medium",
         "transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
         "disabled:pointer-events-none disabled:opacity-60",
         VARIANT_CLASS_NAMES[variant],
         SIZE_CLASS_NAMES[size],

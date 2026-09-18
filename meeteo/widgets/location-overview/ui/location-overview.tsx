@@ -64,7 +64,7 @@ export function LocationOverview({
           </h2>
 
           {city && (
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-white/70">
               {city.region
                 ? `${city.region}, ${city.countryCode}`
                 : city.countryCode}

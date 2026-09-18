@@ -111,9 +111,9 @@ export function MapPanel({
       {isLoading && (
         <div
           role="status"
-          className="absolute inset-0 z-50 grid place-items-center bg-background/60"
+          className="absolute inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm"
         >
-          <span className="rounded-xl border border-border bg-surface px-5 py-3 font-medium">
+          <span className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 font-medium text-white backdrop-blur-md">
             {t("mapSelector.loading")}
           </span>
         </div>

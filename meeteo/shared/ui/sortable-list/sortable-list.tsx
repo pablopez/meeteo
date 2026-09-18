@@ -86,20 +86,20 @@ export function SortableList<T>({
             setDragOverIndex(null);
           }}
           className={[
-            "flex items-center gap-2 rounded-lg border border-border bg-surface p-2 transition-opacity",
+            "flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 p-2 backdrop-blur-md transition-opacity",
             draggedIndex === index
               ? "opacity-40"
               : "",
             dragOverIndex === index &&
               draggedIndex !== index
-              ? "ring-2 ring-primary"
+              ? "ring-2 ring-white/50"
               : "",
           ]
             .filter(Boolean)
             .join(" ")}
         >
           <div
-            className="cursor-grab p-2 text-muted-foreground active:cursor-grabbing"
+            className="cursor-grab p-2 text-white/70 active:cursor-grabbing"
             aria-hidden="true"
           >
             <Icon name="grip" size="sm" />

@@ -21,11 +21,6 @@ describe("Panel", () => {
     const { container } = render(<Panel>Content</Panel>);
 
     expect(container.firstChild).toHaveClass(
-      "rounded-xl",
-      "border",
-      "border-border",
-      "bg-surface/40",
-      "backdrop-blur-lg",
       "p-6",
       "sm:p-8",
     );

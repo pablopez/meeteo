@@ -16,7 +16,7 @@
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "postinstall": "cpy \"node_modules/@meteocons/svg/flat/*.svg\" \"public/meteocons/flat/\" --flat"
+    "postinstall": "cpy \"node_modules/@meteocons/svg/flat/*.svg\" \"public/meteocons/flat/\" --flat && cpy \"node_modules/@meteocons/svg/monochrome/*.svg\" \"public/meteocons/monochrome/\" --flat"
   },
   "dependencies": {
     "@capacitor/core": "8.3.5",

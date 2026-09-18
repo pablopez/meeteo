@@ -4,15 +4,19 @@ import { useTranslation } from "react-i18next";
 
 import { Card } from "@/shared/ui";
 
+import { MeteoconIcon } from "./meteocon-icon";
+
 type SunTimesCardProps = {
   sunrise: string | null;
   sunset: string | null;
+  isDay?: boolean | number;
   className?: string;
 };
 
 export function SunTimesCard({
   sunrise,
   sunset,
+  isDay = true,
   className = "",
 }: SunTimesCardProps) {
   const { t } = useTranslation();
@@ -25,10 +29,10 @@ export function SunTimesCard({
           {t("forecastTable.sunrise")}
         </dt>
         <dd className="mt-1 flex flex-col items-center gap-1 text-2xl font-semibold">
-          <img
-            src="/meteocons/flat/sunrise.svg"
+          <MeteoconIcon
+            name="sunrise"
+            isDay={isDay}
             alt=""
-            loading="lazy"
             className="h-16 w-16 drop-shadow-sm"
           />
           {sunrise ?? unavailable}
@@ -39,10 +43,10 @@ export function SunTimesCard({
           {t("forecastTable.sunset")}
         </dt>
         <dd className="mt-1 flex flex-col items-center gap-1 text-2xl font-semibold">
-          <img
-            src="/meteocons/flat/moonrise.svg"
+          <MeteoconIcon
+            name="moonrise"
+            isDay={isDay}
             alt=""
-            loading="lazy"
             className="h-16 w-16 drop-shadow-sm"
           />
           {sunset ?? unavailable}

@@ -12,6 +12,7 @@ import {
 } from "@/entities/environment";
 import {
   formatWeatherMeasurement,
+  MeteoconIcon,
   PrecipitationCard,
   SunTimesCard,
   TemperatureCard,
@@ -68,7 +69,7 @@ export function ForecastCarousel({
           disabled={currentIndex === 0}
           onClick={() => setSelectedIndex(currentIndex - 1)}
           aria-label={t("forecastNavigation.previous")}
-          className="rounded-full border border-solar-accent bg-solar-surface p-3 text-solar-text transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Icon name="chevron-left" />
         </button>
@@ -82,7 +83,7 @@ export function ForecastCarousel({
           disabled={currentIndex === days.length - 1}
           onClick={() => setSelectedIndex(currentIndex + 1)}
           aria-label={t("forecastNavigation.next")}
-          className="rounded-full border border-solar-accent bg-solar-surface p-3 text-solar-text transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Icon name="chevron-right" />
         </button>
@@ -138,13 +139,14 @@ export function ForecastCarousel({
                 max={
                   weather.temperature.maximum?.value ?? null
                 }
+                isDay={isDay}
                 className="col-span-2"
               />
 
-              <UvIndexCard value={weather.uvIndex} />
+              <UvIndexCard value={weather.uvIndex} isDay={isDay} />
 
-              <div className="flex flex-col items-center rounded-xl bg-transparent p-4 text-center">
-                <dt className="text-sm text-muted-foreground">
+              <Card className="flex flex-col items-center p-4 text-center">
+                <dt className="text-sm text-white/70">
                   {t("environment.airQuality.label")}
                 </dt>
                 <dd className="mt-1 flex items-center justify-center gap-2 text-2xl font-semibold">
@@ -161,22 +163,23 @@ export function ForecastCarousel({
                     : unavailable}
                 </dd>
                 {environment?.airQuality && (
-                  <dd className="mt-1 text-sm text-muted-foreground">
+                  <dd className="mt-1 text-sm text-white/70">
                     {t(
                       `environment.airQuality.levels.${environment.airQuality.level}`,
                     )}
                   </dd>
                 )}
-              </div>
+              </Card>
 
               <SunTimesCard
                 sunrise={weather.sunrise}
                 sunset={weather.sunset}
+                isDay={isDay}
                 className="col-span-2"
               />
 
-              <div className="col-span-2 rounded-xl bg-transparent p-4">
-                <dt className="text-center text-sm text-muted-foreground">
+              <Card className="col-span-2 p-4">
+                <dt className="text-center text-sm text-white/70">
                   {t("environment.allergies.label")}
                 </dt>
                 {environment &&
@@ -190,16 +193,16 @@ export function ForecastCarousel({
                             className="flex flex-col items-center text-center"
                           >
                             <span className="relative">
-                              <img
-                                src={`/meteocons/flat/${getAllergenMeteoconName(measurement.allergen)}.svg`}
+                              <MeteoconIcon
+                                name={getAllergenMeteoconName(measurement.allergen)}
+                                isDay={isDay}
                                 alt=""
-                                loading="lazy"
                                 className="h-16 w-16 drop-shadow-sm"
                               />
-                              <img
-                                src={`/meteocons/flat/${getPollenRiskMeteoconName(measurement.concentration)}.svg`}
+                              <MeteoconIcon
+                                name={getPollenRiskMeteoconName(measurement.concentration)}
+                                isDay={isDay}
                                 alt=""
-                                loading="lazy"
                                 className="absolute -bottom-1 -right-2 h-8 w-8"
                               />
                             </span>
@@ -209,7 +212,7 @@ export function ForecastCarousel({
                               )}{" "}
                               {measurement.unit}
                             </span>
-                            <span className="text-muted-foreground">
+                            <span className="text-white/70">
                               {t(
                                 `environment.allergies.allergens.${measurement.allergen}`,
                               )}
@@ -225,16 +228,16 @@ export function ForecastCarousel({
                     </ul>
                   </dd>
                 ) : (
-                  <dd className="mt-1 text-sm text-muted-foreground">
+                  <dd className="mt-1 text-sm text-white/70">
                     {environment
                       ? t("environment.allergies.unavailable")
                       : unavailable}
                   </dd>
                 )}
-              </div>
+              </Card>
             </dl>
 
-            <p className="mt-4 text-center text-sm text-muted-foreground">
+            <p className="mt-4 text-center text-sm text-white/70">
               {t("forecastNavigation.counter", {
                 current: index + 1,
                 total: days.length,

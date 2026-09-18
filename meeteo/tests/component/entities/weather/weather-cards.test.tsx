@@ -27,12 +27,10 @@ describe("weather cards", () => {
 
     expect(card).toHaveClass(
       "custom-class",
-      "bg-transparent",
+      "bg-white/10",
+      "backdrop-blur-lg",
+      "border-white/20",
       "duration-700",
-    );
-    expect(card).not.toHaveClass(
-      "border-border",
-      "backdrop-blur-md",
     );
   });
 

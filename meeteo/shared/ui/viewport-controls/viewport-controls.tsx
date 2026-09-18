@@ -57,7 +57,7 @@ export function ViewportControls({
   onControlsHoverChange,
 }: ViewportControlsProps) {
   const baseButtonClassName =
-    "pointer-events-auto z-[2000] flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface text-foreground transition-colors hover:bg-surface-muted data-viewport-control";
+    "pointer-events-auto z-[2000] flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20 data-viewport-control";
 
   const buttonClassName = [baseButtonClassName, controlClassName]
     .filter(Boolean)

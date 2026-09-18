@@ -53,26 +53,26 @@ export function ConfirmModal({
   return createPortal(
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onClick={onCancel}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "confirm-modal-title" : undefined}
-        className="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-2xl"
+        className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-lg"
         onClick={(event) => event.stopPropagation()}
       >
         {title && (
           <h2
             id="confirm-modal-title"
-            className="text-lg font-semibold text-foreground"
+            className="text-lg font-semibold text-white"
           >
             {title}
           </h2>
         )}
 
-        <p className="mt-2 text-foreground">{body}</p>
+        <p className="mt-2 text-white">{body}</p>
 
         <div className="mt-6 flex justify-end gap-2">
           <Button

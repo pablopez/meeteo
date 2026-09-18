@@ -19,7 +19,7 @@ export function LiveClock({
 
   return (
     <time
-      className={`text-center text-solar-text ${className}`}
+      className={`text-center ${className}`}
       aria-label={`${time}, ${timezone}`}
     >
       <strong className="block font-mono text-xl tabular-nums">

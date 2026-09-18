@@ -153,14 +153,14 @@ export function HomePage() {
         onCityLocated={handleCityLocated}
       />
 
-      <main className="min-h-screen bg-transparent px-6 py-8 text-solar-text transition-colors duration-[800ms] ease-in-out">
-        <section className="mx-auto max-w-5xl">
+      <main className="min-h-screen w-full bg-transparent text-white">
+        <section className="mx-auto">
           <header className="sr-only">
             <h1 className="text-3xl font-bold">
               {t("home.title")}
             </h1>
 
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-white/70">
               {t("home.description")}
             </p>
           </header>

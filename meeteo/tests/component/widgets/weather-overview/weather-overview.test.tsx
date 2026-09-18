@@ -1,10 +1,7 @@
 import {
   render,
   screen,
-  waitFor,
-  within,
 } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import {
   getSkyState,
   getWeatherForecast,
@@ -151,23 +148,14 @@ describe("WeatherOverview", () => {
     });
 
     expect(heading).toBeInTheDocument();
-    expect(heading.closest("section")).toHaveAttribute(
-      "data-sky-state",
-      "day",
-    );
     expect(mockedGetSkyState).toHaveBeenCalledWith(
       expect.any(Date),
       "Europe/Madrid",
       "2026-09-04T07:42:00Z",
       "2026-09-04T20:43:00Z",
     );
-    expect(document.documentElement).toHaveAttribute(
-      "data-sky-state",
-      "day",
-    );
-    expect(screen.getByTestId("weather-effects")).toHaveAttribute(
-      "data-sky-state",
-      "day",
+    expect(screen.getByTestId("weather-effects")).toHaveClass(
+      "bg-sky-500",
     );
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
@@ -176,8 +164,8 @@ describe("WeatherOverview", () => {
     expect(screen.getByText("1.5 mm")).toBeInTheDocument();
   });
 
-  it("applies the solar state returned for the selected city", async () => {
-    mockedGetSkyState.mockReturnValue("dusk");
+  it("uses the night background when the city is in night time", async () => {
+    mockedGetSkyState.mockReturnValue("deep-night");
     mockedGetWeatherForecast.mockResolvedValue(forecast);
     mockedGetEnvironmentForecast.mockResolvedValue(
       environmentForecast,
@@ -185,62 +173,13 @@ describe("WeatherOverview", () => {
 
     render(<WeatherOverview location={madrid} />);
 
-    const heading = await screen.findByRole("heading", {
+    await screen.findByRole("heading", {
       name: "Weather forecast",
     });
 
-    expect(heading.closest("section")).toHaveAttribute(
-      "data-sky-state",
-      "dusk",
+    expect(screen.getByTestId("weather-effects")).toHaveClass(
+      "bg-[#0a0a0a]",
     );
-  });
-
-  it("keeps the solar background when the selected city is clear", async () => {
-    mockedGetWeatherForecast.mockResolvedValue(forecast);
-    mockedGetEnvironmentForecast.mockResolvedValue(
-      environmentForecast,
-    );
-
-    const { rerender } = render(
-      <WeatherOverview location={madrid} />,
-    );
-
-    expect(
-      await screen.findByTestId("weather-effects"),
-    ).toBeInTheDocument();
-
-    const barcelona: City = {
-      ...madrid,
-      id: "barcelona",
-      name: "Barcelona",
-      coordinates: {
-        latitude: 41.3874,
-        longitude: 2.1686,
-      },
-    };
-    const sunnyForecast: WeatherForecast = {
-      ...forecast,
-      days: [
-        {
-          ...forecast.days[0]!,
-          precipitation: {
-            ...forecast.days[0]!.precipitation,
-            type: "none",
-          },
-          weatherCode: 0,
-        },
-      ],
-    };
-
-    mockedGetWeatherForecast.mockResolvedValue(sunnyForecast);
-    rerender(<WeatherOverview location={barcelona} />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("weather-effects")).toHaveAttribute(
-        "data-sky-state",
-        "day",
-      );
-    });
   });
 
   it("shows an error when the weather request fails", async () => {
@@ -284,112 +223,5 @@ describe("WeatherOverview", () => {
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
     expect(screen.getByText("28 °C")).toBeInTheDocument();
-  });
-
-  it("switches from carousel to table view", async () => {
-    const user = userEvent.setup();
-
-    mockedGetWeatherForecast.mockResolvedValue(forecast);
-    mockedGetEnvironmentForecast.mockResolvedValue(
-      environmentForecast,
-    );
-
-    render(
-      <WeatherOverview
-        location={madrid}
-      />,
-    );
-
-    await screen.findByRole("heading", {
-      name: "Weather forecast",
-    });
-
-    const tableButton = screen.getByRole("button", {
-      name: "Table",
-    });
-
-    await user.click(tableButton);
-
-    expect(tableButton).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-
-    const table = screen.getByRole("table", {
-      name: "15-day weather forecast",
-    });
-
-    expect(
-      within(table).getByText("16 °C"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("14 °C"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("75%"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("3.5 mm"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getAllByText("Rain"),
-    ).toHaveLength(2);
-
-    expect(
-      within(table).getAllByAltText("Weather icon"),
-    ).toHaveLength(2);
-
-    expect(
-      within(table).getByText("6.2"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("07:42"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("20:43"),
-    ).toBeInTheDocument();
-  });
-
-  it("shows environment data in the table for matching dates", async () => {
-    const user = userEvent.setup();
-
-    mockedGetWeatherForecast.mockResolvedValue(forecast);
-    mockedGetEnvironmentForecast.mockResolvedValue(
-      environmentForecast,
-    );
-
-    render(
-      <WeatherOverview
-        location={madrid}
-      />,
-    );
-
-    await screen.findByRole("heading", {
-      name: "Weather forecast",
-    });
-
-    await user.click(
-      screen.getByRole("button", { name: "Table" }),
-    );
-
-    const table = screen.getByRole("table");
-
-    expect(
-      within(table).getByText("35"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getByText("Fair"),
-    ).toBeInTheDocument();
-
-    expect(
-      within(table).getAllByText("N/A").length,
-    ).toBeGreaterThanOrEqual(1);
   });
 });

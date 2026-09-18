@@ -41,7 +41,7 @@ export function FavoritesPanel() {
   if (favorites.length === 0) {
     return (
       <Panel aria-label={t("favorites.section")}>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-white/70">
           {t("favorites.empty")}
         </p>
       </Panel>
@@ -50,7 +50,7 @@ export function FavoritesPanel() {
 
   return (
     <Panel aria-label={t("favorites.section")}>
-      <h3 className="mb-3 text-sm font-medium">
+      <h3 className="mb-3 text-sm font-medium text-white">
         {t("favorites.title")}
       </h3>
 
@@ -63,11 +63,11 @@ export function FavoritesPanel() {
           <li key={city.id}>
             <Card className="flex items-center gap-2 p-3">
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium">
+                <p className="truncate font-medium text-white">
                   {city.name}
                 </p>
 
-                <p className="truncate text-sm text-muted-foreground">
+                <p className="truncate text-sm text-white/70">
                   {[city.region, city.countryCode]
                     .filter(Boolean)
                     .join(", ")}
@@ -84,7 +84,7 @@ export function FavoritesPanel() {
                   onClick={() =>
                     handleMoveUp(city)
                   }
-                  className="rounded-lg p-2 text-foreground transition-colors hover:bg-surface-muted disabled:opacity-40"
+                  className="rounded-lg p-2 text-white transition-colors hover:bg-white/10 disabled:opacity-40"
                 >
                   <Icon name="arrow-up" />
                 </button>
@@ -100,7 +100,7 @@ export function FavoritesPanel() {
                   onClick={() =>
                     handleMoveDown(city)
                   }
-                  className="rounded-lg p-2 text-foreground transition-colors hover:bg-surface-muted disabled:opacity-40"
+                  className="rounded-lg p-2 text-white transition-colors hover:bg-white/10 disabled:opacity-40"
                 >
                   <Icon name="arrow-down" />
                 </button>
@@ -113,7 +113,7 @@ export function FavoritesPanel() {
                   onClick={() =>
                     setCityToRemove(city)
                   }
-                  className="rounded-lg p-2 text-danger transition-colors hover:text-danger/80"
+                  className="rounded-lg p-2 text-white transition-colors hover:bg-white/10"
                 >
                   <Icon name="trash" />
                 </button>

@@ -149,7 +149,7 @@ export function Carousel<T>({
               type="button"
               onClick={goToPrevious}
               disabled={!loop && currentIndex === 0}
-              className="rounded-lg border border-border bg-surface p-2 text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-white/20 bg-white/10 p-2 text-white backdrop-blur-md disabled:cursor-not-allowed disabled:opacity-40 hover:bg-white/20"
               aria-label={previousLabel}
             >
               <Icon name="chevron-left" size="sm" />
@@ -174,8 +174,8 @@ export function Carousel<T>({
                         ? "h-1.5 w-6 rounded-full transition-colors"
                         : "h-2.5 w-2.5 rounded-full transition-colors",
                       index === currentIndex
-                        ? "bg-primary"
-                        : "bg-border hover:bg-muted-foreground",
+                        ? "bg-white"
+                        : "bg-white/40 hover:bg-white/70",
                     ].join(" ")}
                   />
                 ))}
@@ -186,7 +186,7 @@ export function Carousel<T>({
               type="button"
               onClick={goToNext}
               disabled={!loop && currentIndex === items.length - 1}
-              className="rounded-lg border border-border bg-surface p-2 text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-white/20 bg-white/10 p-2 text-white backdrop-blur-md disabled:cursor-not-allowed disabled:opacity-40 hover:bg-white/20"
               aria-label={nextLabel}
             >
               <Icon name="chevron-right" size="sm" />

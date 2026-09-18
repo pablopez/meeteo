@@ -8,14 +8,17 @@ import {
   getUvMeteoconName,
   getUvRisk,
 } from "../lib/get-uv-index-presentation";
+import { MeteoconIcon } from "./meteocon-icon";
 
 type UvIndexCardProps = {
   value: number | null;
+  isDay?: boolean | number;
   className?: string;
 };
 
 export function UvIndexCard({
   value,
+  isDay = true,
   className = "",
 }: UvIndexCardProps) {
   const { t, i18n } = useTranslation();
@@ -23,10 +26,10 @@ export function UvIndexCard({
 
   return (
     <Card className={`flex flex-col items-center p-4 text-center ${className}`}>
-      <img
-        src={`/meteocons/flat/${getUvMeteoconName(value)}.svg`}
+      <MeteoconIcon
+        name={getUvMeteoconName(value)}
+        isDay={isDay}
         alt=""
-        loading="lazy"
         className="h-20 w-20 shrink-0 drop-shadow-sm"
       />
       <div className="flex flex-col items-center">

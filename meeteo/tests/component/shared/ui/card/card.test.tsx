@@ -16,14 +16,10 @@ describe("Card", () => {
 
     expect(container.firstChild).toHaveClass(
       "rounded-2xl",
-      "bg-transparent",
+      "bg-white/10",
+      "backdrop-blur-lg",
+      "border-white/20",
       "overflow-hidden",
-    );
-    expect(container.firstChild).not.toHaveClass(
-      "border",
-      "border-border",
-      "bg-surface/60",
-      "backdrop-blur-md",
     );
   });
 

@@ -52,7 +52,7 @@ export function CitySearch({
             {city.name}
           </span>
 
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-white/70">
             {[city.region, city.countryCode]
               .filter(Boolean)
               .join(", ")}

@@ -31,13 +31,13 @@ export function FavoriteCitiesSection({
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
-        className="flex w-full items-center justify-between rounded-lg border border-border bg-surface p-4 text-left font-medium"
+        className="flex w-full items-center justify-between rounded-lg border border-white/20 bg-white/10 p-4 text-left font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20"
         aria-expanded={isOpen}
       >
         <span>
           {t("favorites.title")}
           {!isEmpty && (
-            <span className="ml-2 text-sm text-muted-foreground">
+            <span className="ml-2 text-sm text-white/70">
               ({favorites.length})
             </span>
           )}
@@ -56,7 +56,7 @@ export function FavoriteCitiesSection({
       {isOpen && (
         <div className="mt-2">
           {isEmpty ? (
-            <p className="rounded-lg border border-border border-dashed p-4 text-center text-sm text-muted-foreground">
+            <p className="rounded-lg border border-white/20 border-dashed p-4 text-center text-sm text-white/70">
               {t("favorites.empty")}
             </p>
           ) : (

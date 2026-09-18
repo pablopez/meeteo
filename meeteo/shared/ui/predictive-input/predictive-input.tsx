@@ -148,7 +148,7 @@ export function PredictiveInput<T>({
         <Icon
           name={icon}
           size="md"
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
         />
 
         <input
@@ -175,10 +175,10 @@ export function PredictiveInput<T>({
           }
           onKeyDown={handleInputKeyDown}
           className={[
-            "w-full rounded-xl border border-border",
-            "bg-surface py-3 pl-10 pr-4 text-foreground",
-            "outline-none transition-colors",
-            "focus:border-primary focus:ring-2 focus:ring-primary/20",
+            "w-full rounded-xl border border-white/20",
+            "bg-white/10 py-3 pl-10 pr-4 text-white placeholder:text-white/50",
+            "outline-none transition-colors backdrop-blur-md",
+            "focus:border-white/50 focus:ring-2 focus:ring-white/20",
             "disabled:cursor-not-allowed disabled:opacity-60",
             className,
           ]
@@ -191,7 +191,7 @@ export function PredictiveInput<T>({
         <p
           id={messageId}
           role="status"
-          className="mt-2 text-sm text-muted-foreground"
+          className="mt-2 text-sm text-white/70"
         >
           {messages.loading}
         </p>
@@ -201,7 +201,7 @@ export function PredictiveInput<T>({
         <p
           id={messageId}
           role="alert"
-          className="mt-2 text-sm text-danger"
+          className="mt-2 text-sm text-white"
         >
           {messages.error}
         </p>
@@ -210,7 +210,7 @@ export function PredictiveInput<T>({
       {status === "success" && !hasOptions && (
         <p
           id={messageId}
-          className="mt-2 text-sm text-muted-foreground"
+          className="mt-2 text-sm text-white/70"
         >
           {messages.empty}
         </p>
@@ -221,7 +221,7 @@ export function PredictiveInput<T>({
           id={listId}
           role="listbox"
           aria-label={resultsLabel}
-          className="absolute z-10 mt-2 w-full overflow-hidden rounded-xl border border-border bg-surface"
+          className="absolute z-10 mt-2 w-full overflow-hidden rounded-xl border border-white/20 bg-white/10 backdrop-blur-lg"
         >
           {options.map((option, index) => (
             <li
@@ -241,7 +241,7 @@ export function PredictiveInput<T>({
                 onKeyDown={(event) =>
                   handleOptionKeyDown(event, index)
                 }
-                className="flex w-full px-4 py-3 text-left outline-none hover:bg-surface-muted focus:bg-surface-muted"
+                className="flex w-full px-4 py-3 text-left text-white outline-none hover:bg-white/10 focus:bg-white/10"
               >
                 {renderOption(option)}
               </button>

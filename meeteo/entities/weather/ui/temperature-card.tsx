@@ -5,16 +5,19 @@ import { useTranslation } from "react-i18next";
 import { Card } from "@/shared/ui";
 
 import { formatWeatherMeasurement } from "../lib/format-weather-measurement";
+import { MeteoconIcon } from "./meteocon-icon";
 
 type TemperatureCardProps = {
   min: number | null;
   max: number | null;
+  isDay?: boolean | number;
   className?: string;
 };
 
 export function TemperatureCard({
   min,
   max,
+  isDay = true,
   className = "",
 }: TemperatureCardProps) {
   const { t, i18n } = useTranslation();
@@ -28,10 +31,10 @@ export function TemperatureCard({
           {t("weather.minimum")}
         </dt>
         <dd className="mt-1 flex flex-col items-center gap-1 text-2xl font-semibold">
-          <img
-            src="/meteocons/flat/thermometer-colder.svg"
+          <MeteoconIcon
+            name="thermometer-colder"
+            isDay={isDay}
             alt=""
-            loading="lazy"
             className="h-16 w-16 shrink-0 drop-shadow-sm"
           />
           {formatWeatherMeasurement(
@@ -47,10 +50,10 @@ export function TemperatureCard({
           {t("weather.maximum")}
         </dt>
         <dd className="mt-1 flex flex-col items-center gap-1 text-2xl font-semibold">
-          <img
-            src="/meteocons/flat/thermometer-warmer.svg"
+          <MeteoconIcon
+            name="thermometer-warmer"
+            isDay={isDay}
             alt=""
-            loading="lazy"
             className="h-16 w-16 shrink-0 drop-shadow-sm"
           />
           {formatWeatherMeasurement(

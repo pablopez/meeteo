@@ -4,6 +4,8 @@ export {
   type UvRisk,
 } from "./lib/get-uv-index-presentation";
 
+export { getMeteoconSrc } from "./lib/meteocon-src";
+
 export {
   createTemperature,
   type Temperature,
@@ -47,3 +49,4 @@ export { UvIndexCard } from "./ui/uv-index-card";
 export { SunTimesCard } from "./ui/sun-times-card";
 export { WeatherEffects } from "./ui/weather-effects";
 export { WeatherFlatIcon } from "./ui/weather-flat-icon";
+export { MeteoconIcon } from "./ui/meteocon-icon";
