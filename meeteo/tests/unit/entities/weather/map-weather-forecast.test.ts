@@ -24,6 +24,7 @@ describe("mapWeatherForecast", () => {
     });
 
     expect(forecast.timezone).toBe("Europe/Madrid");
+    expect(forecast.currentTemperature).toBeNull();
     expect(forecast.days).toHaveLength(2);
 
     expect(forecast.days[0]).toEqual({
@@ -67,6 +68,8 @@ describe("mapWeatherForecast", () => {
       sunset: [null],
     },
   });
+
+  expect(forecast.currentTemperature).toBeNull();
 
   expect(forecast.days[0]).toEqual({
     date: "2026-09-04",

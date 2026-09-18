@@ -33,6 +33,15 @@ const airQualityResponse = {
   },
 };
 
+const reverseGeocodeResponse = {
+  place_id: 123456,
+  address: {
+    city: "Madrid",
+    country_code: "es",
+    state: "Comunidad de Madrid",
+  },
+};
+
 test.describe("current browser location", () => {
   test.use({
     locale: "en-US",
@@ -80,11 +89,22 @@ test.describe("current browser location", () => {
       },
     );
 
+    await page.route(
+      "https://nominatim.openstreetmap.org/reverse**",
+      async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(reverseGeocodeResponse),
+        });
+      },
+    );
+
     await page.goto("/");
 
     await expect(
       page.getByRole("heading", {
-        name: "Current location",
+        name: "Madrid",
       }),
     ).toBeVisible();
 

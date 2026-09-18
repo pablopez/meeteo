@@ -5,6 +5,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 
+import type { City } from "@/entities/city";
 import {
   getCurrentLocation,
   type CurrentLocation,
@@ -13,6 +14,11 @@ import { LocateUserButton } from "@/features/locate-user";
 
 jest.mock("@/entities/location", () => ({
   getCurrentLocation: jest.fn(),
+}));
+
+jest.mock("@/entities/city", () => ({
+  ...jest.requireActual("@/entities/city"),
+  reverseGeocode: jest.fn(),
 }));
 
 const mockedGetCurrentLocation =
@@ -26,33 +32,50 @@ const currentLocation: CurrentLocation = {
   },
 };
 
+const locatedCity: City = {
+  id: "nominatim-123",
+  name: "Madrid",
+  countryCode: "ES",
+  region: "Madrid",
+  coordinates: {
+    latitude: 40.4168,
+    longitude: -3.7038,
+  },
+  isFavorite: false,
+};
+
 describe("LocateUserButton", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns the current location", async () => {
+  it("returns the located city", async () => {
     mockedGetCurrentLocation.mockResolvedValue(
       currentLocation,
     );
 
-    const onLocationLocated = jest.fn();
+    const reverseGeocode = jest.requireMock(
+      "@/entities/city",
+    ).reverseGeocode as jest.Mock;
+    reverseGeocode.mockResolvedValue(locatedCity);
+
+    const onCityLocated = jest.fn();
 
     render(
       <LocateUserButton
-        onLocationLocated={onLocationLocated}
+        onCityLocated={onCityLocated}
       />,
     );
 
     fireEvent.click(screen.getByRole("button"));
 
     await waitFor(() => {
-      expect(onLocationLocated).toHaveBeenCalledWith(
-        currentLocation,
+      expect(onCityLocated).toHaveBeenCalledWith(
+        locatedCity,
       );
     });
 
-    expect(onLocationLocated).toHaveBeenCalledTimes(1);
+    expect(onCityLocated).toHaveBeenCalledTimes(1);
   });
 
   it("disables the button while locating", () => {
@@ -62,7 +85,7 @@ describe("LocateUserButton", () => {
 
     render(
       <LocateUserButton
-        onLocationLocated={jest.fn()}
+        onCityLocated={jest.fn()}
       />,
     );
 
@@ -78,11 +101,11 @@ describe("LocateUserButton", () => {
       new Error("Geolocation failed"),
     );
 
-    const onLocationLocated = jest.fn();
+    const onCityLocated = jest.fn();
 
     render(
       <LocateUserButton
-        onLocationLocated={onLocationLocated}
+        onCityLocated={onCityLocated}
       />,
     );
 
@@ -92,6 +115,6 @@ describe("LocateUserButton", () => {
       await screen.findByRole("alert"),
     ).toBeInTheDocument();
 
-    expect(onLocationLocated).not.toHaveBeenCalled();
+    expect(onCityLocated).not.toHaveBeenCalled();
   });
 });

@@ -4,20 +4,19 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
 
+import { reverseGeocode } from "@/entities/city";
 import type { City } from "@/entities/city";
-import type {
-  CurrentLocation,
-  Location,
-} from "@/entities/location";
+import { getCurrentLocation } from "@/entities/location";
+import type { Location } from "@/entities/location";
 import { useFavoriteCities } from "@/features/favorite-cities";
-import { useLocateUser } from "@/features/locate-user";
 import { useSelectedCity } from "@/features/select-city";
 import { Carousel } from "@/shared/ui";
-import { AppMenu } from "@/widgets/app-menu";
+import { AppMenu, type PanelKey } from "@/widgets/app-menu";
 import { LocationOverview } from "@/widgets/location-overview";
 import { WeatherOverview } from "@/widgets/weather-overview";
 
@@ -36,29 +35,40 @@ export function HomePage() {
     useSelectedCity();
   const { favorites } = useFavoriteCities();
 
-  const [currentLocation, setCurrentLocation] =
-    useState<CurrentLocation | null>(null);
   const [activeLocationId, setActiveLocationId] =
     useState<string | null>(null);
   const [timezones, setTimezones] = useState<
     Record<string, string>
   >({});
-
-  const { locateUser } = useLocateUser({
-    onLocationLocated: (location: CurrentLocation) => {
-      setCurrentLocation(location);
-    },
-  });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeMenuPanel, setActiveMenuPanel] =
+    useState<PanelKey | null>(null);
+  const hasAttemptedLocation = useRef(false);
 
   useEffect(() => {
     if (
-      favorites.length === 0 &&
-      !selectedCity &&
-      !currentLocation
+      favorites.length > 0 ||
+      selectedCity ||
+      hasAttemptedLocation.current
     ) {
-      void locateUser();
+      return;
     }
-  }, [favorites, selectedCity, currentLocation, locateUser]);
+
+    hasAttemptedLocation.current = true;
+
+    void getCurrentLocation()
+      .then((location) =>
+        reverseGeocode(location.coordinates),
+      )
+      .then((city) => {
+        selectCity(city);
+        setActiveLocationId(city.id);
+      })
+      .catch(() => {
+        setActiveMenuPanel("search");
+        setIsMenuOpen(true);
+      });
+  }, [favorites, selectedCity, selectCity]);
 
   const carouselItems = useMemo<Location[]>(() => {
     const items: Location[] = [];
@@ -76,12 +86,8 @@ export function HomePage() {
       items.push(selectedCity);
     }
 
-    if (items.length === 0 && currentLocation) {
-      items.push(currentLocation);
-    }
-
     return items;
-  }, [favorites, selectedCity, currentLocation]);
+  }, [favorites, selectedCity]);
 
   const activeIndex = useMemo(() => {
     if (carouselItems.length === 0) {
@@ -100,11 +106,9 @@ export function HomePage() {
     setActiveLocationId(city.id);
   }
 
-  function handleLocationLocated(
-    location: CurrentLocation,
-  ) {
-    setCurrentLocation(location);
-    setActiveLocationId(location.id);
+  function handleCityLocated(city: City) {
+    selectCity(city);
+    setActiveLocationId(city.id);
   }
 
   function handleCarouselChange(index: number) {
@@ -141,8 +145,12 @@ export function HomePage() {
   return (
     <>
       <AppMenu
+        isOpen={isMenuOpen}
+        activePanel={activeMenuPanel}
+        onOpenChange={setIsMenuOpen}
+        onActivePanelChange={setActiveMenuPanel}
         onCitySelect={handleCitySelect}
-        onLocationLocated={handleLocationLocated}
+        onCityLocated={handleCityLocated}
       />
 
       <main className="min-h-screen bg-transparent px-6 py-8 text-solar-text transition-colors duration-[800ms] ease-in-out">

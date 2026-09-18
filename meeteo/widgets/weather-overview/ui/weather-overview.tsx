@@ -220,6 +220,7 @@ export function WeatherOverview({
           key={locationKey}
           days={composedDays}
           isDay={isDaytime}
+          currentTemperature={weatherForecast.currentTemperature}
         />
       ) : (
         <ForecastTable days={composedDays} />

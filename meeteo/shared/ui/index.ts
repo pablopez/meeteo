@@ -58,4 +58,8 @@ export {
 } from "./carousel/carousel";
 
 export { LiveClock } from "./live-clock/live-clock";
+export {
+  ViewportControls,
+  type ViewportControlsProps,
+} from "./viewport-controls";
 export { Toast, type ToastType } from "./toast";

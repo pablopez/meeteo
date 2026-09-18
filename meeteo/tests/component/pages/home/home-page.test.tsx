@@ -1,13 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import { getCurrentLocation } from "@/entities/location";
 import { ToastProvider } from "@/shared/lib/toast";
 import { HomePage } from "@/views/home";
 
-jest.mock("@/features/locate-user", () => ({
-  ...jest.requireActual("@/features/locate-user"),
-  useLocateUser: jest.fn(() => ({ locateUser: jest.fn() })),
+jest.mock("@/entities/location", () => ({
+  ...jest.requireActual("@/entities/location"),
+  getCurrentLocation: jest.fn(),
 }));
+
+const mockedGetCurrentLocation =
+  jest.mocked(getCurrentLocation);
 
 jest.mock("@/entities/weather", () => ({
   ...jest.requireActual("@/entities/weather"),
@@ -29,7 +33,25 @@ jest.mock("@/entities/environment", () => ({
   ),
 }));
 
-function renderHomePage() {
+const defaultSelectedCity = {
+  id: "default-city",
+  name: "Default City",
+  countryCode: "DC",
+  region: "Default Region",
+  coordinates: { latitude: 0, longitude: 0 },
+  isFavorite: false,
+};
+
+function renderHomePage(
+  { withDefaultCity = true } = {},
+) {
+  if (withDefaultCity) {
+    window.localStorage.setItem(
+      "meeteo:selected-city",
+      JSON.stringify(defaultSelectedCity),
+    );
+  }
+
   return render(
     <ToastProvider>
       <HomePage />
@@ -38,6 +60,9 @@ function renderHomePage() {
 }
 
 describe("HomePage", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
   it("renders the application title", () => {
     renderHomePage();
 
@@ -115,6 +140,20 @@ describe("HomePage", () => {
 
     expect(
       screen.getByRole("button", { name: "Favorites" }),
+    ).toBeInTheDocument();
+  });
+
+  it("opens the search panel when location is denied and no city is selected", async () => {
+    mockedGetCurrentLocation.mockRejectedValue(
+      new Error("Geolocation denied"),
+    );
+
+    renderHomePage({ withDefaultCity: false });
+
+    expect(
+      await screen.findByLabelText(
+        "Search for a city or town",
+      ),
     ).toBeInTheDocument();
   });
 });

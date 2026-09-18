@@ -50,6 +50,7 @@ describe("WeatherOverview", () => {
 
   const forecast: WeatherForecast = {
     timezone: "Europe/Madrid",
+    currentTemperature: null,
     days: [
       {
         date: "2026-09-04",

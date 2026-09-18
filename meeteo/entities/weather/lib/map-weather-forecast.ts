@@ -51,6 +51,22 @@ function readTime(
   return match[1];
 }
 
+function readCurrentTemperature(
+  response: OpenMeteoForecastResponseDto,
+): number | null {
+  const temperature = response.current_weather?.temperature;
+
+  if (temperature === null || temperature === undefined) {
+    return null;
+  }
+
+  if (typeof temperature !== "number" || !Number.isFinite(temperature)) {
+    throw new Error("Invalid weather forecast response");
+  }
+
+  return temperature;
+}
+
 export function mapWeatherForecast(
   response: OpenMeteoForecastResponseDto,
 ): WeatherForecast {
@@ -113,6 +129,7 @@ export function mapWeatherForecast(
 
   return createWeatherForecast({
     timezone: response.timezone,
+    currentTemperature: readCurrentTemperature(response),
     days,
   });
 }

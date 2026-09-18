@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { reverseGeocode, type City } from "@/entities/city";
-import { useFavoriteCities } from "@/features/favorite-cities";
 import { useSelectedCity } from "@/features/select-city";
 import { useToast } from "@/shared/lib/toast";
 import { Icon, Panel } from "@/shared/ui";
@@ -29,7 +28,6 @@ export function MapPanel({
 }: MapPanelProps) {
   const { t } = useTranslation();
   const toast = useToast();
-  const { addFavorite } = useFavoriteCities();
   const { selectCity } = useSelectedCity();
   const [isLoading, setIsLoading] = useState(false);
   const [cursorPosition, setCursorPosition] =
@@ -51,7 +49,6 @@ export function MapPanel({
         longitude,
       });
 
-      addFavorite(city);
       selectCity(city);
       onCitySelected?.(city);
       toast.success(t("mapSelector.success"));
@@ -65,11 +62,21 @@ export function MapPanel({
   return (
     <Panel
       aria-label={t("mapSelector.dialogLabel")}
-      className="relative overflow-hidden p-0:important"
+      className="relative overflow-hidden !p-0"
     >
       <div
         className="map-cursor-none relative h-96 w-full"
         onPointerMove={(event) => {
+          const target = event.target;
+
+          if (
+            target instanceof Element &&
+            target.closest("[data-viewport-control]")
+          ) {
+            setCursorPosition(null);
+            return;
+          }
+
           const rect =
             event.currentTarget.getBoundingClientRect();
 

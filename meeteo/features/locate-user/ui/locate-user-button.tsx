@@ -2,24 +2,22 @@
 
 import { useTranslation } from "react-i18next";
 
-import type { CurrentLocation } from "@/entities/location";
+import type { City } from "@/entities/city";
 import { MenuSquareButton } from "@/shared/ui";
 
-import { useLocateUser } from "../model/use-locate-user";
+import { useLocateCity } from "../model/use-locate-city";
 
 type LocateUserButtonProps = {
-  onLocationLocated: (
-    location: CurrentLocation,
-  ) => void;
+  onCityLocated: (city: City) => void;
 };
 
 export function LocateUserButton({
-  onLocationLocated,
+  onCityLocated,
 }: LocateUserButtonProps) {
   const { t } = useTranslation();
 
-  const { status, locateUser } = useLocateUser({
-    onLocationLocated,
+  const { status, locateCity } = useLocateCity({
+    onCityLocated,
   });
 
   const isLoading = status === "loading";
@@ -30,7 +28,7 @@ export function LocateUserButton({
         icon="location"
         label={t("location.useCurrent")}
         disabled={isLoading}
-        onClick={() => void locateUser()}
+        onClick={() => void locateCity()}
       />
 
       {status === "error" && (

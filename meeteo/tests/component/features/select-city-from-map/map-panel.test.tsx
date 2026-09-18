@@ -71,9 +71,7 @@ describe("MapPanel", () => {
     });
 
     expect(
-      await screen.findByText(
-        "City added to favorites",
-      ),
+      await screen.findByText("City selected"),
     ).toBeInTheDocument();
 
     expect(onCitySelected).toHaveBeenCalledWith(madrid);
@@ -175,13 +173,13 @@ describe("MapPanel", () => {
     );
 
     expect(map.panBy).toHaveBeenCalledWith([
-      -120, 0,
+      120, 0,
     ]);
 
     await user.click(
       screen.getByRole("button", { name: "Pan up" }),
     );
 
-    expect(map.panBy).toHaveBeenCalledWith([0, 120]);
+    expect(map.panBy).toHaveBeenCalledWith([0, -120]);
   });
 });

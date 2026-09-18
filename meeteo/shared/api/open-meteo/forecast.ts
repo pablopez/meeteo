@@ -12,8 +12,18 @@ const DAILY_VARIABLES = [
   "sunset",
 ].join(",");
 
+export type OpenMeteoCurrentWeatherDto = {
+  temperature?: number | null;
+  weathercode?: number | null;
+  is_day?: number;
+  time?: string;
+  windspeed?: number;
+  winddirection?: number;
+};
+
 export type OpenMeteoForecastResponseDto = {
   timezone?: string;
+  current_weather?: OpenMeteoCurrentWeatherDto;
   daily?: {
     time?: string[];
     weather_code?: Array<number | null>;
@@ -43,6 +53,7 @@ export function getOpenMeteoForecast({
     latitude: String(coordinates.latitude),
     longitude: String(coordinates.longitude),
     daily: DAILY_VARIABLES,
+    current_weather: "true",
     timezone: "auto",
     forecast_days: "15",
     temperature_unit: "celsius",

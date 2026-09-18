@@ -11,6 +11,7 @@ import {
   type DailyEnvironmentalConditions,
 } from "@/entities/environment";
 import {
+  formatWeatherMeasurement,
   PrecipitationCard,
   SunTimesCard,
   TemperatureCard,
@@ -28,11 +29,13 @@ type ForecastDayView = {
 type ForecastCarouselProps = {
   days: readonly ForecastDayView[];
   isDay?: number | boolean;
+  currentTemperature?: number | null;
 };
 
 export function ForecastCarousel({
   days,
   isDay = true,
+  currentTemperature,
 }: ForecastCarouselProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? "en";
@@ -110,6 +113,16 @@ export function ForecastCarousel({
                     className="h-32 w-32 drop-shadow-sm"
                   />
                 </dd>
+                {index === 0 && currentTemperature != null && (
+                  <dd className="mt-1 text-2xl font-semibold">
+                    {formatWeatherMeasurement(
+                      currentTemperature,
+                      "celsius",
+                      locale,
+                      unavailable,
+                    )}
+                  </dd>
+                )}
               </Card>
 
               <PrecipitationCard

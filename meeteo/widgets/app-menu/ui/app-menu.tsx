@@ -4,12 +4,10 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { City } from "@/entities/city";
-import type { CurrentLocation } from "@/entities/location";
 import { LanguagePanel } from "@/features/change-language";
 import { ThemeSwitcher } from "@/features/change-theme";
 import { useFavoriteCities } from "@/features/favorite-cities";
@@ -28,43 +26,48 @@ import {
 
 const MENU_ID = "app-menu-panel";
 
-type AppMenuProps = {
-  onCitySelect: (city: City) => void;
-  onLocationLocated: (
-    location: CurrentLocation,
-  ) => void;
-};
-
-type PanelKey =
+export type PanelKey =
   | "search"
   | "map"
   | "language"
   | "favorites"
   | "theme";
 
+type AppMenuProps = {
+  isOpen: boolean;
+  activePanel: PanelKey | null;
+  onOpenChange: (isOpen: boolean) => void;
+  onActivePanelChange: (
+    activePanel: PanelKey | null,
+  ) => void;
+  onCitySelect: (city: City) => void;
+  onCityLocated: (city: City) => void;
+};
+
 export function AppMenu({
+  isOpen,
+  activePanel,
+  onOpenChange,
+  onActivePanelChange,
   onCitySelect,
-  onLocationLocated,
+  onCityLocated,
 }: AppMenuProps) {
   const { t } = useTranslation();
   const { favorites } = useFavoriteCities();
-  const [isOpen, setIsOpen] = useState(false);
-  const [activePanel, setActivePanel] =
-    useState<PanelKey | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const closeMenu = useCallback(() => {
-    setIsOpen(false);
-    setActivePanel(null);
-  }, []);
+    onOpenChange(false);
+    onActivePanelChange(null);
+  }, [onOpenChange, onActivePanelChange]);
 
   const togglePanel = useCallback(
     (panel: PanelKey) => {
-      setActivePanel((current) =>
-        current === panel ? null : panel,
+      onActivePanelChange(
+        activePanel === panel ? null : panel,
       );
     },
-    [],
+    [activePanel, onActivePanelChange],
   );
 
   function handleCitySelect(city: City) {
@@ -72,10 +75,8 @@ export function AppMenu({
     closeMenu();
   }
 
-  function handleLocationLocated(
-    location: CurrentLocation,
-  ) {
-    onLocationLocated(location);
+  function handleCityLocated(city: City) {
+    onCityLocated(city);
     closeMenu();
   }
 
@@ -163,9 +164,7 @@ export function AppMenu({
         openLabel={t("menu.open")}
         closeLabel={t("menu.close")}
         controls={MENU_ID}
-        onClick={() =>
-          setIsOpen((current) => !current)
-        }
+        onClick={() => onOpenChange(!isOpen)}
         className="fixed right-4 top-4 z-50"
       />
 
@@ -209,9 +208,7 @@ export function AppMenu({
                 />
 
                 <LocateUserButton
-                  onLocationLocated={
-                    handleLocationLocated
-                  }
+                  onCityLocated={handleCityLocated}
                 />
 
                 <MenuSquareButton

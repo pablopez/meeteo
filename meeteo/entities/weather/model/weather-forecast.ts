@@ -2,16 +2,19 @@ import type { DailyForecast } from "./daily-forecast";
 
 export type WeatherForecast = {
   readonly timezone: string;
+  readonly currentTemperature: number | null;
   readonly days: readonly DailyForecast[];
 };
 
 export type CreateWeatherForecastInput = {
   readonly timezone: string;
+  readonly currentTemperature?: number | null;
   readonly days: readonly DailyForecast[];
 };
 
 export function createWeatherForecast({
   timezone,
+  currentTemperature = null,
   days,
 }: CreateWeatherForecastInput): WeatherForecast {
   const normalizedTimezone = timezone.trim();
@@ -26,8 +29,17 @@ export function createWeatherForecast({
     );
   }
 
+  if (
+    currentTemperature !== null &&
+    (!Number.isFinite(currentTemperature) ||
+      typeof currentTemperature !== "number")
+  ) {
+    throw new Error("Invalid current temperature");
+  }
+
   return {
     timezone: normalizedTimezone,
+    currentTemperature,
     days: [...days],
   };
 }
