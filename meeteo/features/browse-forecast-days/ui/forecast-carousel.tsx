@@ -83,7 +83,7 @@ export function ForecastCarousel({
             type="button"
             onClick={() => setSelectedIndex(currentIndex - 1)}
             aria-label={t("forecastNavigation.previous")}
-            className="min-w-0 truncate rounded-full border border-white/20 bg-white/10 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/20"
+            className="min-w-0 truncate rounded-full border border-white/20 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/10"
           >
             {formatShortDate(days[currentIndex - 1].weather.date, locale)}
           </button>
@@ -91,7 +91,7 @@ export function ForecastCarousel({
           <span className="min-w-0" />
         )}
 
-        <h3 className="order-first col-span-2 min-w-0 truncate rounded-full border border-white/40 bg-white/20 px-3 py-2 text-center text-base font-semibold capitalize backdrop-blur-md sm:order-none sm:col-span-1 sm:px-5 sm:text-lg">
+        <h3 className="order-first col-span-2 min-w-0 truncate rounded-full border border-white/40 px-3 py-2 text-center text-base font-semibold capitalize backdrop-blur-md sm:order-none sm:col-span-1 sm:px-5 sm:text-lg">
           {formattedDate}
         </h3>
 
@@ -100,7 +100,7 @@ export function ForecastCarousel({
             type="button"
             onClick={() => setSelectedIndex(currentIndex + 1)}
             aria-label={t("forecastNavigation.next")}
-            className="min-w-0 truncate rounded-full border border-white/20 bg-white/10 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/20"
+            className="min-w-0 truncate rounded-full border border-white/20 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/10"
           >
             {formatShortDate(days[currentIndex + 1].weather.date, locale)}
           </button>

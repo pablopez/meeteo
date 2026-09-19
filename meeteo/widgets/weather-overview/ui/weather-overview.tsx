@@ -161,7 +161,6 @@ export function WeatherOverview({
       {isActive && currentDay && (
         <WeatherEffects
           key={`${location.id}:${currentDay.date}`}
-          isDay={isDaytime}
         />
       )}
 

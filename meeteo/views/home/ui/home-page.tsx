@@ -160,11 +160,18 @@ export function HomePage() {
     ? daytimeByLocation[activeLocation.id] ?? true
     : true;
 
+  useEffect(() => {
+    document.body.classList.remove(
+      "weather-theme-day",
+      "weather-theme-night",
+    );
+    document.body.classList.add(
+      isDaytime ? "weather-theme-day" : "weather-theme-night",
+    );
+  }, [isDaytime]);
+
   return (
-    <div
-      data-weather-theme={isDaytime ? "day" : "night"}
-      className={isDaytime ? "weather-theme-day" : "weather-theme-night"}
-    >
+    <>
       <AppMenu
         isOpen={isMenuOpen}
         activePanel={activeMenuPanel}
@@ -222,6 +229,6 @@ export function HomePage() {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 }

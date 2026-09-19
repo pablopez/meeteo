@@ -76,14 +76,14 @@ export function CityCarouselHeader({
         aria-label={t("location.previousCity", {
           city: previousCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/20 sm:flex"
+        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 sm:flex"
       >
         <span className="truncate max-w-full font-medium">
           {previousCity.name}
         </span>
       </button>
 
-      <div className="city-information-panel order-first col-span-2 grid w-full min-w-0 max-w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded-3xl border border-white/40 bg-white/20 px-4 py-5 text-center backdrop-blur-md transition-colors duration-700 sm:order-none sm:col-span-1 sm:gap-4 sm:px-8">
+      <div className="city-information-panel order-first col-span-2 grid w-full min-w-0 max-w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded-3xl border border-white/40 px-4 py-5 text-center backdrop-blur-md sm:order-none sm:col-span-1 sm:gap-4 sm:px-8">
         <div className="min-w-0 text-left">
           <h2 className="truncate text-xl font-bold sm:text-2xl">
             {currentCity.name}
@@ -123,7 +123,7 @@ export function CityCarouselHeader({
         aria-label={t("location.nextCity", {
           city: nextCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/20 sm:flex"
+        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 sm:flex"
       >
         <span className="truncate max-w-full font-medium">
           {nextCity.name}

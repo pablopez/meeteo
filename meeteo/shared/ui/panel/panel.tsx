@@ -14,7 +14,7 @@ export function Panel({
     <section
       {...props}
       className={[
-        "rounded-xl p-6 sm:p-8 transition-colors duration-700 ease-in-out",
+        "rounded-xl p-6 sm:p-8",
         className,
       ]
         .filter(Boolean)

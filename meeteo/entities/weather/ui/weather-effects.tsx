@@ -1,13 +1,7 @@
-type WeatherEffectsProps = {
-  isDay: boolean;
-};
-
-export function WeatherEffects({ isDay }: WeatherEffectsProps) {
+export function WeatherEffects() {
   return (
     <div
-      className={`fixed inset-0 -z-10 transition-colors duration-1000 ease-in-out ${
-        isDay ? "bg-sky-500" : "bg-[#0a0a0a]"
-      }`}
+      className="pointer-events-none fixed inset-0 -z-10"
       aria-hidden="true"
       data-testid="weather-effects"
     />

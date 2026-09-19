@@ -128,6 +128,8 @@ describe("WeatherOverview", () => {
   });
 
   it("shows the first forecast day", async () => {
+    const handleDaytimeChange = jest.fn();
+
     mockedGetWeatherForecast.mockResolvedValue(forecast);
     mockedGetEnvironmentForecast.mockResolvedValue(
       environmentForecast,
@@ -136,6 +138,7 @@ describe("WeatherOverview", () => {
     render(
       <WeatherOverview
         location={madrid}
+        onDaytimeChange={handleDaytimeChange}
       />,
     );
 
@@ -144,7 +147,7 @@ describe("WeatherOverview", () => {
     ).toBeInTheDocument();
 
     const heading = await screen.findByRole("heading", {
-      name: "Weather forecast",
+      name: "Friday, September 4",
     });
 
     expect(heading).toBeInTheDocument();
@@ -154,8 +157,9 @@ describe("WeatherOverview", () => {
       "2026-09-04T07:42:00Z",
       "2026-09-04T20:43:00Z",
     );
-    expect(screen.getByTestId("weather-effects")).toHaveClass(
-      "bg-sky-500",
+    expect(handleDaytimeChange).toHaveBeenCalledWith(
+      madrid.id,
+      true,
     );
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
@@ -164,21 +168,29 @@ describe("WeatherOverview", () => {
     expect(screen.getByText("1.5 mm")).toBeInTheDocument();
   });
 
-  it("uses the night background when the city is in night time", async () => {
+  it("reports the night time state to the parent", async () => {
+    const handleDaytimeChange = jest.fn();
+
     mockedGetSkyState.mockReturnValue("deep-night");
     mockedGetWeatherForecast.mockResolvedValue(forecast);
     mockedGetEnvironmentForecast.mockResolvedValue(
       environmentForecast,
     );
 
-    render(<WeatherOverview location={madrid} />);
+    render(
+      <WeatherOverview
+        location={madrid}
+        onDaytimeChange={handleDaytimeChange}
+      />,
+    );
 
     await screen.findByRole("heading", {
-      name: "Weather forecast",
+      name: "Friday, September 4",
     });
 
-    expect(screen.getByTestId("weather-effects")).toHaveClass(
-      "bg-[#0a0a0a]",
+    expect(handleDaytimeChange).toHaveBeenCalledWith(
+      madrid.id,
+      false,
     );
   });
 
@@ -217,7 +229,7 @@ describe("WeatherOverview", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "Weather forecast",
+        name: "Friday, September 4",
       }),
     ).toBeInTheDocument();
 
