@@ -23,13 +23,16 @@ import {
   Panel,
 } from "@/shared/ui";
 
+import { AppInfoPanel } from "./app-info-panel";
+
 const MENU_ID = "app-menu-panel";
 
 export type PanelKey =
   | "search"
   | "map"
   | "language"
-  | "favorites";
+  | "favorites"
+  | "info";
 
 type AppMenuProps = {
   isOpen: boolean;
@@ -53,6 +56,7 @@ export function AppMenu({
   const { t } = useTranslation();
   const { favorites } = useFavoriteCities();
   const rootRef = useRef<HTMLDivElement>(null);
+  const hasSetDefaultPanel = useRef(false);
 
   const closeMenu = useCallback(() => {
     onOpenChange(false);
@@ -78,6 +82,16 @@ export function AppMenu({
     closeMenu();
   }
 
+  function handleToggleMenu() {
+    if (isOpen) {
+      closeMenu();
+      return;
+    }
+
+    onOpenChange(true);
+    onActivePanelChange("search");
+  }
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -87,6 +101,31 @@ export function AppMenu({
       document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      hasSetDefaultPanel.current = false;
+      return;
+    }
+
+    if (
+      activePanel === null &&
+      !hasSetDefaultPanel.current
+    ) {
+      hasSetDefaultPanel.current = true;
+      onActivePanelChange("search");
+    }
+  }, [isOpen, activePanel, onActivePanelChange]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -145,9 +184,6 @@ export function AppMenu({
     );
 
     return () => {
-      document.body.style.overflow =
-        previousOverflow;
-
       document.removeEventListener(
         "keydown",
         handleKeyDown,
@@ -155,153 +191,158 @@ export function AppMenu({
     };
   }, [isOpen, closeMenu]);
 
+  const containerTransformClass = isOpen
+    ? "translate-y-0"
+    : "-translate-y-[calc(100%-(4rem+env(safe-area-inset-top)))]";
+
+  const headerSafeAreaClass = isOpen
+    ? "pb-[env(safe-area-inset-bottom)]"
+    : "pt-[env(safe-area-inset-top)]";
+
   return (
     <div ref={rootRef}>
-      <MenuToggleButton
-        isOpen={isOpen}
-        openLabel={t("menu.open")}
-        closeLabel={t("menu.close")}
-        controls={MENU_ID}
-        onClick={() => onOpenChange(!isOpen)}
-        className="fixed right-4 top-4 z-50"
-      />
+      <div
+        id={MENU_ID}
+        className={[
+          "fixed inset-x-0 top-0 z-50 h-[100dvh] overflow-hidden",
+          "bg-white/40 backdrop-blur-2xl dark:bg-black/40",
+          "transform transition-transform duration-300 ease-in-out will-change-transform",
+          containerTransformClass,
+        ].join(" ")}
+      >
+        <div className="flex h-full flex-col">
+          <div
+            role={isOpen ? "dialog" : undefined}
+            aria-modal={isOpen ? true : undefined}
+            aria-labelledby={
+              isOpen ? "app-menu-title" : undefined
+            }
+            aria-hidden={!isOpen}
+            inert={!isOpen}
+            className="flex-1 overflow-y-auto px-6 pt-6"
+          >
+            {isOpen && (
+              <>
+                <h2
+                  id="app-menu-title"
+                  className="sr-only"
+                >
+                  {t("menu.title")}
+                </h2>
 
-      {isOpen && (
-        <div
-          id={MENU_ID}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="app-menu-title"
-          className="fixed inset-0 z-40 overflow-y-auto bg-black/80 backdrop-blur-xl"
-        >
-          <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-6 pb-6 pt-24">
-            <h2
-              id="app-menu-title"
-              className="sr-only"
-            >
-              {t("menu.title")}
-            </h2>
-
-            <div className="space-y-8">
-              <section
-                aria-label={t(
-                  "menu.locationSection",
-                )}
-                className="flex flex-wrap justify-center gap-4"
-              >
-                <MenuSquareButton
-                  icon="search"
-                  label={t("menu.search")}
-                  active={activePanel === "search"}
-                  onClick={() =>
-                    togglePanel("search")
-                  }
-                />
-
-                <MapSelectorButton
-                  active={activePanel === "map"}
-                  onClick={() =>
-                    togglePanel("map")
-                  }
-                />
-
-                <LocateUserButton
-                  onCityLocated={handleCityLocated}
-                />
-
-                <MenuSquareButton
-                  icon="language"
-                  label={t("menu.language")}
-                  active={activePanel === "language"}
-                  onClick={() =>
-                    togglePanel("language")
-                  }
-                />
-
-                <MenuSquareButton
-                  icon="star"
-                  label={t("menu.favorites")}
-                  badge={
-                    favorites.length > 0
-                      ? favorites.length
-                      : undefined
-                  }
-                  active={activePanel === "favorites"}
-                  onClick={() =>
-                    togglePanel("favorites")
-                  }
-                />
-              </section>
-
-              {activePanel === "search" && (
-                <Panel aria-label={t("menu.search")}>
-                  <CitySearch
-                    onCitySelect={handleCitySelect}
-                  />
-                </Panel>
-              )}
-
-              {activePanel === "map" && (
-                <MapPanel
-                  onCitySelected={handleCitySelect}
-                />
-              )}
-
-              {activePanel === "language" && (
-                <LanguagePanel />
-              )}
-
-              {activePanel === "favorites" && (
-                <FavoritesPanel />
-              )}
-            </div>
-
-            <footer className="mt-auto border-t border-white/20 pt-6 text-sm text-white/70">
-              <h3 className="mb-3 font-semibold text-white">
-                {t("menu.dataSources")}
-              </h3>
-
-              <div className="space-y-2">
-                <p>
-                  {t("menu.weatherData")}:{" "}
-                  <a
-                    href="https://open-meteo.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
+                <div className="space-y-8">
+                  <section
+                    aria-label={t(
+                      "menu.locationSection",
+                    )}
+                    className="flex flex-wrap justify-center gap-4"
                   >
-                    Open-Meteo
-                  </a>
-                </p>
+                    <MenuSquareButton
+                      icon="search"
+                      label={t("menu.search")}
+                      active={activePanel === "search"}
+                      onClick={() =>
+                        togglePanel("search")
+                      }
+                    />
 
-                <p>
-                  {t("menu.environmentData")}:{" "}
-                  <a
-                    href="https://atmosphere.copernicus.eu/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
-                  >
-                    CAMS
-                  </a>
-                </p>
+                    <MapSelectorButton
+                      active={activePanel === "map"}
+                      onClick={() =>
+                        togglePanel("map")
+                      }
+                    />
 
-                <p>
-                  {t("menu.mapData")}:{" "}
-                  <a
-                    href="https://www.openstreetmap.org/copyright"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
-                  >
-                    OpenStreetMap
-                  </a>
-                </p>
-              </div>
-            </footer>
+                    <LocateUserButton
+                      onCityLocated={handleCityLocated}
+                    />
+
+                    <MenuSquareButton
+                      icon="language"
+                      label={t("menu.language")}
+                      active={activePanel === "language"}
+                      onClick={() =>
+                        togglePanel("language")
+                      }
+                    />
+
+                    <MenuSquareButton
+                      icon="star"
+                      label={t("menu.favorites")}
+                      badge={
+                        favorites.length > 0
+                          ? favorites.length
+                          : undefined
+                      }
+                      active={activePanel === "favorites"}
+                      onClick={() =>
+                        togglePanel("favorites")
+                      }
+                    />
+
+                    <MenuSquareButton
+                      icon="info"
+                      label={t("menu.info")}
+                      active={activePanel === "info"}
+                      onClick={() =>
+                        togglePanel("info")
+                      }
+                    />
+                  </section>
+
+                  {activePanel === "search" && (
+                    <Panel aria-label={t("menu.search")}>
+                      <CitySearch
+                        onCitySelect={handleCitySelect}
+                      />
+                    </Panel>
+                  )}
+
+                  {activePanel === "map" && (
+                    <MapPanel
+                      onCitySelected={handleCitySelect}
+                    />
+                  )}
+
+                  {activePanel === "language" && (
+                    <LanguagePanel />
+                  )}
+
+                  {activePanel === "favorites" && (
+                    <FavoritesPanel />
+                  )}
+
+                  {activePanel === "info" && (
+                    <AppInfoPanel />
+                  )}
+                </div>
+              </>
+            )}
           </div>
+
+          <header
+            className={[
+              "relative flex h-16 flex-none items-center justify-center px-4",
+              "transition-all duration-300 ease-in-out",
+              headerSafeAreaClass,
+            ].join(" ")}
+          >
+            <h1 className="text-2xl font-extrabold tracking-tight">
+              {t("home.title")}
+            </h1>
+
+            <MenuToggleButton
+              isOpen={isOpen}
+              openLabel={t("menu.open")}
+              closeLabel={t("menu.close")}
+              controls={MENU_ID}
+              onClick={handleToggleMenu}
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+            />
+          </header>
         </div>
-      )}
+      </div>
+
     </div>
   );
 }

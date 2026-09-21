@@ -15,11 +15,13 @@ body {
   transition:
     color 700ms ease-in-out,
     background-color 1000ms ease-in-out;
+  --app-background: #0ea5e9;
 }
 
 body.weather-theme-day {
   color: #0f172a;
   background-color: #0ea5e9;
+  --app-background: #0ea5e9;
 }
 
 body.weather-theme-day .text-white {
@@ -41,6 +43,7 @@ body.weather-theme-day .text-white\/40 {
 body.weather-theme-night {
   color: white;
   background-color: #0a0a0a;
+  --app-background: #0a0a0a;
 }
 
 .leaflet-control-container {

@@ -19,6 +19,7 @@ export const ICON_NAMES = [
   "moon",
   "close",
   "grip",
+  "info",
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];

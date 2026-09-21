@@ -181,17 +181,13 @@ export function HomePage() {
         onCityLocated={handleCityLocated}
       />
 
-      <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-transparent text-white">
+      <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-transparent pt-[calc(4rem+env(safe-area-inset-top))] text-white">
         <section className="mx-auto w-full min-w-0 max-w-full">
-          <header className="sr-only">
-            <h1 className="text-3xl font-bold">
-              {t("home.title")}
-            </h1>
-
-            <p className="mt-2 text-sm text-white/70">
+          <div className="sr-only">
+            <p className="text-sm text-white/70">
               {t("home.description")}
             </p>
-          </header>
+          </div>
 
           <div className="mt-8">
             {carouselItems.length > 0 ? (

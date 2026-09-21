@@ -161,5 +161,7 @@ menu: {
   weatherData: "Meteorología y geocodificación",
   environmentData: "Calidad del aire y polen",
   mapData: "Datos cartográficos",
+  info: "Información de la app",
+  appInfo: "Acerca de Meeteo",
 },
 } as const;

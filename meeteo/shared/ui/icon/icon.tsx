@@ -8,6 +8,7 @@ import {
   ChevronUp,
   GalleryHorizontal,
   GripVertical,
+  Info,
   Languages,
   Map,
   MapPin,
@@ -59,6 +60,7 @@ const ICON_COMPONENTS = {
   moon: Moon,
   close: X,
   grip: GripVertical,
+  info: Info,
 } satisfies Record<IconName, React.ComponentType<LucideProps>>;
 
 export function Icon({

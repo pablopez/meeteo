@@ -162,5 +162,7 @@ menu: {
   weatherData: "Weather and geocoding",
   environmentData: "Air quality and pollen",
   mapData: "Map data",
+  info: "App information",
+  appInfo: "About Meeteo",
 },
 } as const;
