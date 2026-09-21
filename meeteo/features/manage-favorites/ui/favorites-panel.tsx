@@ -41,7 +41,7 @@ export function FavoritesPanel() {
   if (favorites.length === 0) {
     return (
       <Panel aria-label={t("favorites.section")}>
-        <p className="text-sm text-white/70">
+        <p className="text-sm ">
           {t("favorites.empty")}
         </p>
       </Panel>
@@ -63,11 +63,11 @@ export function FavoritesPanel() {
           <li key={city.id}>
             <Card className="flex items-center gap-2 p-3">
               <div className="min-w-0 flex-1">
-                <p className="truncate font-medium text-white">
+                <p className="truncate font-medium">
                   {city.name}
                 </p>
 
-                <p className="truncate text-sm text-white/70">
+                <p className="truncate text-sm ">
                   {[city.region, city.countryCode]
                     .filter(Boolean)
                     .join(", ")}
@@ -84,7 +84,7 @@ export function FavoritesPanel() {
                   onClick={() =>
                     handleMoveUp(city)
                   }
-                  className="rounded-lg p-2 text-white transition-colors hover:bg-white/10 disabled:opacity-40"
+                  className="rounded-lg p-2 transition-colors hover:bg-white/10 disabled:opacity-40"
                 >
                   <Icon name="arrow-up" />
                 </button>

@@ -148,7 +148,7 @@ export function PredictiveInput<T>({
         <Icon
           name={icon}
           size="md"
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 "
         />
 
         <input
@@ -191,7 +191,7 @@ export function PredictiveInput<T>({
         <p
           id={messageId}
           role="status"
-          className="mt-2 text-sm text-white/70"
+          className="mt-2 text-sm "
         >
           {messages.loading}
         </p>
@@ -210,7 +210,7 @@ export function PredictiveInput<T>({
       {status === "success" && !hasOptions && (
         <p
           id={messageId}
-          className="mt-2 text-sm text-white/70"
+          className="mt-2 text-sm "
         >
           {messages.empty}
         </p>

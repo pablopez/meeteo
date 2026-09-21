@@ -66,7 +66,7 @@ export const Select = forwardRef<
       .filter(Boolean)
       .join(" ")}
         >
-      <span className="text-sm text-white/70">
+      <span className="text-sm ">
         {label}
       </span>
 
@@ -83,7 +83,7 @@ export const Select = forwardRef<
     <Icon
       name={icon}
       size="sm"
-      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
+      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 "
     />
   )}
 
@@ -119,14 +119,14 @@ export const Select = forwardRef<
   <Icon
     name="chevron-down"
     size="sm"
-    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 "
   />
 </span>
 
         <Icon
           name="chevron-down"
           size="sm"
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 "
         />
       </span>
     </label>

@@ -25,18 +25,18 @@ export function FavoriteCityItem({
         onClick={() => onSelect(city)}
         className="min-w-0 flex-1 text-left"
       >
-        <span className="block truncate font-medium text-white">
+        <span className="block truncate font-medium">
           {city.name}
         </span>
 
         {city.region && (
-          <span className="block truncate text-sm text-white/70">
+          <span className="block truncate text-sm">
             {city.region}, {city.countryCode}
           </span>
         )}
 
         {!city.region && (
-          <span className="block truncate text-sm text-white/70">
+          <span className="block truncate text-sm">
             {city.countryCode}
           </span>
         )}

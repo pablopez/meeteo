@@ -184,12 +184,12 @@ export function HomePage() {
       <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-transparent pt-[calc(4rem+env(safe-area-inset-top))] text-white">
         <section className="mx-auto w-full min-w-0 max-w-full">
           <div className="sr-only">
-            <p className="text-sm text-white/70">
+            <p className="text-sm ">
               {t("home.description")}
             </p>
           </div>
 
-          <div className="mt-8">
+          <div className="">
             {carouselItems.length > 0 ? (
               <section aria-label={t("location.overviewLabel")}>
                 <CityCarouselHeader
@@ -208,7 +208,7 @@ export function HomePage() {
                   paginationVariant="hidden"
                   showNavigation={false}
                   renderItem={(location, index) => (
-                    <div className="space-y-8 pt-6">
+                    <div className="space-y-8 pt-2">
                       <WeatherOverview
                         location={location}
                         onTimezoneChange={handleTimezoneChange}

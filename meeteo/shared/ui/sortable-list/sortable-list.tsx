@@ -99,7 +99,7 @@ export function SortableList<T>({
             .join(" ")}
         >
           <div
-            className="cursor-grab p-2 text-white/70 active:cursor-grabbing"
+            className="cursor-grab p-2  active:cursor-grabbing"
             aria-hidden="true"
           >
             <Icon name="grip" size="sm" />

@@ -3,6 +3,8 @@
 
 @theme {
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --color-primary: var(--color-primary, #ffffff);
+  --color-accent: var(--color-accent, #0f172a);
 }
 
 html {
@@ -16,34 +18,22 @@ body {
     color 700ms ease-in-out,
     background-color 1000ms ease-in-out;
   --app-background: #0ea5e9;
+  --color-primary: #ffffff;
+  --color-accent: #0f172a;
 }
 
 body.weather-theme-day {
-  color: #0f172a;
+  color: var(--color-primary);
   background-color: #0ea5e9;
   --app-background: #0ea5e9;
-}
-
-body.weather-theme-day .text-white {
-  color: #0f172a;
-}
-
-body.weather-theme-day .text-white\/70 {
-  color: rgb(15 23 42 / 0.7);
-}
-
-body.weather-theme-day .text-white\/60 {
-  color: rgb(15 23 42 / 0.6);
-}
-
-body.weather-theme-day .text-white\/40 {
-  color: rgb(15 23 42 / 0.4);
+  --color-accent: #0f172a;
 }
 
 body.weather-theme-night {
-  color: white;
+  color: var(--color-primary);
   background-color: #0a0a0a;
   --app-background: #0a0a0a;
+  --color-accent: #38bdf8;
 }
 
 .leaflet-control-container {

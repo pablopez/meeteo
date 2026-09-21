@@ -150,7 +150,7 @@ export function ForecastTable({
                     )}
                   </span>
 
-                  <span className="text-sm text-white/70">
+                  <span className="text-sm ">
                     {t(
                       `weather.precipitationTypes.${weather.precipitation.type}`,
                     )}
@@ -232,7 +232,7 @@ export function ForecastTable({
                               )}{" "}
                               {measurement.unit}
                             </span>
-                            <span className="text-xs text-white/70">
+                            <span className="text-xs ">
                               {t(
                                 `environment.allergies.risks.${getPollenRisk(measurement.concentration)}`,
                               )}
@@ -243,7 +243,7 @@ export function ForecastTable({
                     )}
                   </ul>
                 ) : (
-                  <span className="text-white/70">
+                  <span className="">
                     {unavailable}
                   </span>
                 )}

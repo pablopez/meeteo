@@ -32,12 +32,15 @@ export function MenuSquareButton({
       type="button"
       aria-label={label}
       className={[
+        // Layout
         "relative flex h-20 w-20 flex-col items-center justify-center gap-1",
-        "rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md",
-        "text-sm font-medium text-white transition-colors",
-        "hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
+        // Primary text
+        "text-sm font-medium text-primary transition-colors",
+        // Accent text on interaction
+        "hover:text-accent focus-visible:text-accent",
+        // Active state
         active
-          ? "ring-2 ring-white/50 bg-white/20"
+          ? "text-accent"
           : "",
         className,
       ]
@@ -51,7 +54,7 @@ export function MenuSquareButton({
       />
 
       {badge !== undefined && (
-        <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-white/20 px-1 text-xs font-semibold text-white">
+        <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold text-primary">
           {badge}
         </span>
       )}

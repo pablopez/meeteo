@@ -37,7 +37,7 @@ export function FavoriteCitiesSection({
         <span>
           {t("favorites.title")}
           {!isEmpty && (
-            <span className="ml-2 text-sm text-white/70">
+            <span className="ml-2 text-sm ">
               ({favorites.length})
             </span>
           )}
@@ -56,7 +56,7 @@ export function FavoriteCitiesSection({
       {isOpen && (
         <div className="mt-2">
           {isEmpty ? (
-            <p className="rounded-lg border border-white/20 border-dashed p-4 text-center text-sm text-white/70">
+            <p className="rounded-lg border border-white/20 border-dashed p-4 text-center text-sm ">
               {t("favorites.empty")}
             </p>
           ) : (

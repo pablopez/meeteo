@@ -21,9 +21,8 @@ export function MenuToggleButton({
 }: MenuToggleButtonProps) {
   const baseClassNames = [
     "flex h-12 w-12 items-center justify-center",
-    "rounded-full border border-white/20",
-    "bg-white/10 text-white backdrop-blur-md",
-    "transition-colors hover:bg-white/20",
+    "text-white",
+    "transition-colors",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
     className,
   ]

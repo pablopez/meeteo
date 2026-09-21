@@ -23,7 +23,7 @@ function CityLiveClock({ timezone, locale }: CityLiveClockProps) {
   return (
     <time
       dateTime={time}
-      className="font-mono text-2xl font-semibold tabular-nums"
+      className="font-mono text-3xl font-semibold tabular-nums"
     >
       {time}
     </time>
@@ -68,7 +68,7 @@ export function CityCarouselHeader({
   return (
     <nav
       aria-label={t("location.carouselLabel")}
-      className="city-carousel-header grid w-full min-w-0 max-w-full grid-cols-2 items-stretch gap-3 px-2 pt-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:px-0"
+      className="city-carousel-header grid w-full min-w-0 max-w-full grid-cols-2 items-stretch gap-3 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:px-0"
     >
       <button
         type="button"
@@ -76,27 +76,28 @@ export function CityCarouselHeader({
         aria-label={t("location.previousCity", {
           city: previousCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 sm:flex"
+        className="city-navigation-button min-w-0 items-center justify-start px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
       >
         <span className="truncate max-w-full font-medium">
           {previousCity.name}
         </span>
       </button>
 
-      <div className="city-information-panel order-first col-span-2 grid w-full min-w-0 max-w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded-3xl border border-white/40 px-4 py-5 text-center backdrop-blur-md sm:order-none sm:col-span-1 sm:gap-4 sm:px-8">
-        <div className="min-w-0 text-left">
-          <h2 className="truncate text-xl font-bold sm:text-2xl">
+      <div className="city-information-panel flex w-full min-w-0 max-w-full flex-row items-center justify-center gap-10 px-4 py-5 text-center backdrop-blur-md">
+        <FavoriteCityButton city={currentCity} />
+        <div className="min-w-0 text-center">
+          <h2 className="truncate text-2xl font-bold sm:text-4xl">
             {currentCity.name}
           </h2>
 
-          <p className="truncate text-sm text-white/70">
+          <p className="truncate text-sm">
             {currentCity.region
               ? `${currentCity.region}, ${currentCity.countryCode}`
               : currentCity.countryCode}
           </p>
         </div>
 
-        <div className="flex flex-col items-center justify-center border-x border-white/20 px-4">
+        <div className="flex flex-col items-center justify-center">
           {currentTimezone ? (
             <>
               <CityLiveClock
@@ -110,11 +111,7 @@ export function CityCarouselHeader({
           ) : (
             <span className="text-xs text-white/40">--:--</span>
           )}
-        </div>
-
-        <div className="flex justify-end">
-          <FavoriteCityButton city={currentCity} />
-        </div>
+        </div>        
       </div>
 
       <button
@@ -123,7 +120,7 @@ export function CityCarouselHeader({
         aria-label={t("location.nextCity", {
           city: nextCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-center rounded-full border border-white/20 px-3 py-2 text-center text-sm text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 sm:flex"
+        className="city-navigation-button min-w-0 items-center justify-end px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
       >
         <span className="truncate max-w-full font-medium">
           {nextCity.name}

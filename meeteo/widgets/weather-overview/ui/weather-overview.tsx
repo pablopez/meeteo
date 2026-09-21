@@ -121,7 +121,7 @@ export function WeatherOverview({
 
   if (weatherStatus === "idle") {
     return (
-      <p className="text-sm text-white/70">
+      <p className="text-sm ">
         {t("weather.empty")}
       </p>
     );
@@ -131,7 +131,7 @@ export function WeatherOverview({
     return (
       <p
         role="status"
-        className="text-sm text-white/70"
+        className="text-sm "
       >
         {t("weather.loading")}
       </p>
@@ -169,7 +169,7 @@ export function WeatherOverview({
         className="relative z-10 w-full min-w-0 max-w-full"
       >
         {environmentStatus === "loading" && (
-        <p className="mt-2 text-xs text-white/70">
+        <p className="mt-2 text-xs ">
           {t("environment.loading")}
         </p>
       )}
@@ -185,31 +185,8 @@ export function WeatherOverview({
         days={composedDays}
         isDay={isDaytime}
         currentTemperature={weatherForecast.currentTemperature}
-      />
-
-      <p className="mt-6 text-xs text-white/70">
-        <Trans
-          i18nKey="environment.attribution"
-          components={{
-            openMeteo: (
-              <a
-                href="https://open-meteo.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              />
-            ),
-            cams: (
-              <a
-                href="https://atmosphere.copernicus.eu/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              />
-            ),
-          }}
-        />
-        </p>
+        showPagination={false}
+      />    
       </Panel>
     </>
   );

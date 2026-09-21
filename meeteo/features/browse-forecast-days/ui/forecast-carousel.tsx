@@ -39,12 +39,14 @@ type ForecastCarouselProps = {
   days: readonly ForecastDayView[];
   isDay?: number | boolean;
   currentTemperature?: number | null;
+  showPagination?: boolean;
 };
 
 export function ForecastCarousel({
   days,
   isDay = true,
   currentTemperature,
+  showPagination = true,
 }: ForecastCarouselProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? "en";
@@ -75,7 +77,7 @@ export function ForecastCarousel({
       className="w-full min-w-0 max-w-full"
     >
       <nav
-        className="grid min-w-0 grid-cols-2 items-center gap-3 pt-6 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
+        className="grid min-w-0 grid-cols-2 items-center gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
         aria-label={t("forecastNavigation.label")}
       >
         {currentIndex > 0 ? (
@@ -83,7 +85,7 @@ export function ForecastCarousel({
             type="button"
             onClick={() => setSelectedIndex(currentIndex - 1)}
             aria-label={t("forecastNavigation.previous")}
-            className="min-w-0 truncate rounded-full border border-white/20 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/10"
+            className="min-w-0 min-w-0 items-center justify-start px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
           >
             {formatShortDate(days[currentIndex - 1].weather.date, locale)}
           </button>
@@ -91,16 +93,16 @@ export function ForecastCarousel({
           <span className="min-w-0" />
         )}
 
-        <h3 className="order-first col-span-2 min-w-0 truncate rounded-full border border-white/40 px-3 py-2 text-center text-base font-semibold capitalize backdrop-blur-md sm:order-none sm:col-span-1 sm:px-5 sm:text-lg">
+        <h4 className="order-first col-span-2 min-w-0 truncate px-3 py-2 text-center text-base font-semibold capitalize backdrop-blur-md sm:order-none sm:col-span-1 sm:px-5 sm:text-2xl">
           {formattedDate}
-        </h3>
+        </h4>
 
         {currentIndex < days.length - 1 ? (
           <button
             type="button"
             onClick={() => setSelectedIndex(currentIndex + 1)}
             aria-label={t("forecastNavigation.next")}
-            className="min-w-0 truncate rounded-full border border-white/20 px-2 py-2 text-sm capitalize text-white/70 backdrop-blur-md transition-colors hover:bg-white/10"
+            className="min-w-0 items-center justify-end px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
           >
             {formatShortDate(days[currentIndex + 1].weather.date, locale)}
           </button>
@@ -178,7 +180,7 @@ export function ForecastCarousel({
               />
 
               <Card className="col-span-2 p-4">
-                <dt className="text-center text-sm text-white/70">
+                <dt className="text-center text-sm ">
                   {t("environment.allergies.label")}
                 </dt>
                 {environment &&
@@ -211,7 +213,7 @@ export function ForecastCarousel({
                               )}{" "}
                               {measurement.unit}
                             </span>
-                            <span className="text-white/70">
+                            <span className="">
                               {t(
                                 `environment.allergies.allergens.${measurement.allergen}`,
                               )}
@@ -227,7 +229,7 @@ export function ForecastCarousel({
                     </ul>
                   </dd>
                 ) : (
-                  <dd className="mt-1 text-sm text-white/70">
+                  <dd className="mt-1 text-sm ">
                     {environment
                       ? t("environment.allergies.unavailable")
                       : unavailable}
@@ -235,13 +237,13 @@ export function ForecastCarousel({
                 )}
               </Card>
             </dl>
-
-            <p className="mt-4 text-center text-sm text-white/70">
+            {showPagination && (
+            <p className="mt-4 text-center text-sm ">
               {t("forecastNavigation.counter", {
                 current: index + 1,
                 total: days.length,
               })}
-            </p>
+            </p>)}
           </article>
         )}
       />
