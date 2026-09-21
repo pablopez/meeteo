@@ -14,7 +14,7 @@ export function Card({
     <div
       {...props}
       className={[
-        "rounded-2xl border border-white/20 bg-white/10 backdrop-blur-lg overflow-hidden",
+        "rounded-2xl border border-white/20 bg-white/05 backdrop-blur-lg overflow-hidden",
         className,
       ]
         .filter(Boolean)

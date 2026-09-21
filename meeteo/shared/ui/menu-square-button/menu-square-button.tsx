@@ -38,10 +38,6 @@ export function MenuSquareButton({
         "text-sm font-medium text-primary transition-colors",
         // Accent text on interaction
         "hover:text-accent focus-visible:text-accent",
-        // Active state
-        active
-          ? "text-accent"
-          : "",
         className,
       ]
         .filter(Boolean)
@@ -50,11 +46,16 @@ export function MenuSquareButton({
       <Icon
         name={icon}
         size="lg"
-        className="h-8 w-8"
+        className={[
+          "h-8 w-8",
+          active ? "text-accent" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       />
 
       {badge !== undefined && (
-        <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold text-primary">
+        <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-400 px-1 text-xs font-semibold text-slate-900">
           {badge}
         </span>
       )}

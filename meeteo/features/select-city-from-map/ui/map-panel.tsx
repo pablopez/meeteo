@@ -62,10 +62,10 @@ export function MapPanel({
   return (
     <Panel
       aria-label={t("mapSelector.dialogLabel")}
-      className="relative overflow-hidden !p-0"
+      className="relative min-h-0 flex-1 overflow-hidden !p-0"
     >
       <div
-        className="map-cursor-none relative h-96 w-full"
+        className="map-cursor-none relative h-full min-h-64 w-full"
         onPointerMove={(event) => {
           const target = event.target;
 

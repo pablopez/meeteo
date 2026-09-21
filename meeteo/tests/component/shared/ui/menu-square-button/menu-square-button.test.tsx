@@ -50,11 +50,13 @@ describe("MenuSquareButton", () => {
       />,
     );
 
-    expect(
-      screen.getByRole("button", {
-        name: "Open search",
-      }),
-    ).toHaveClass("ring-2");
+    const button = screen.getByRole("button", {
+      name: "Open search",
+    });
+
+    expect(button.querySelector("svg")).toHaveClass(
+      "text-accent",
+    );
   });
 
   it("renders a badge", () => {
@@ -66,6 +68,9 @@ describe("MenuSquareButton", () => {
       />,
     );
 
-    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("3")).toHaveClass(
+      "bg-yellow-400",
+      "text-slate-900",
+    );
   });
 });

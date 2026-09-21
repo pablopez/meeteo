@@ -219,7 +219,12 @@ export function AppMenu({
             }
             aria-hidden={!isOpen}
             inert={!isOpen}
-            className="flex-1 overflow-y-auto px-6 pt-6"
+            className={[
+              "min-h-0 flex-1 px-6 pt-6",
+              activePanel === "map"
+                ? "overflow-hidden"
+                : "overflow-y-auto",
+            ].join(" ")}
           >
             {isOpen && (
               <>
@@ -230,7 +235,13 @@ export function AppMenu({
                   {t("menu.title")}
                 </h2>
 
-                <div className="space-y-8">
+                <div
+                  className={[
+                    activePanel === "map"
+                      ? "flex h-full min-h-0 flex-col gap-8"
+                      : "space-y-8",
+                  ].join(" ")}
+                >
                   <section
                     aria-label={t(
                       "menu.locationSection",

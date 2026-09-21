@@ -56,7 +56,6 @@ function MapNavigationControls({
   return (
     <ViewportControls
       className="h-full w-full"
-      controlClassName="leaflet-control"
       zoomInLabel={t("mapSelector.zoomIn")}
       zoomOutLabel={t("mapSelector.zoomOut")}
       panUpLabel={t("mapSelector.panUp")}

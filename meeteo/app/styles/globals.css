@@ -41,6 +41,12 @@ body.weather-theme-night {
   z-index: 1000;
 }
 
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile-pane {
+    filter: brightness(0.65) invert(1) contrast(1.35) hue-rotate(180deg) saturate(0.7);
+  }
+}
+
 .map-cursor-none,
 .map-cursor-none .leaflet-container {
   cursor: none !important;

@@ -133,9 +133,18 @@ describe("MapPanel", () => {
 
     await screen.findByTestId("map");
 
-    await user.click(
-      screen.getByRole("button", { name: "Zoom in" }),
+    const zoomInButton = screen.getByRole("button", {
+      name: "Zoom in",
+    });
+
+    expect(zoomInButton).toHaveClass(
+      "absolute",
+      "bottom-14",
+      "right-4",
     );
+    expect(zoomInButton).not.toHaveClass("leaflet-control");
+
+    await user.click(zoomInButton);
 
     expect(map.zoomIn).toHaveBeenCalledTimes(1);
 
@@ -168,9 +177,20 @@ describe("MapPanel", () => {
 
     await screen.findByTestId("map");
 
-    await user.click(
-      screen.getByRole("button", { name: "Pan right" }),
+    const panRightButton = screen.getByRole("button", {
+      name: "Pan right",
+    });
+
+    expect(panRightButton).toHaveClass(
+      "absolute",
+      "right-4",
+      "top-1/2",
     );
+    expect(panRightButton).not.toHaveClass(
+      "leaflet-control",
+    );
+
+    await user.click(panRightButton);
 
     expect(map.panBy).toHaveBeenCalledWith([
       120, 0,
