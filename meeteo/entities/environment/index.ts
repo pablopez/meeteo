@@ -1,4 +1,5 @@
 export { getAirQualityColorClass } from "./lib/get-air-quality-color-class";
+export { AirQualityCard } from "./ui/air-quality-card";
 export {
   getAllergenMeteoconName,
   getPollenRisk,

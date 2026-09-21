@@ -75,14 +75,9 @@ export function PrecipitationCard({
 
   return (
     <Card className={`flex flex-col items-center p-4 text-center ${className}`}>
-      <dt className="text-sm opacity-75">{t("weather.precipitation")}</dt>
-      <dd className="mt-1 text-sm opacity-75">
-        {formatWeatherMeasurement(
-          probability,
-          "percent",
-          locale,
-          unavailable,
-        )}
+      <dt className="text-sm opacity-75">{t("weather.precipitation")}</dt>      
+      <dd className="mt-2">
+        <PrecipitationDrop probability={probability} isDay={isDaytime} />
       </dd>
       <dd className="mt-1 text-2xl font-semibold">
         {formatWeatherMeasurement(
@@ -92,11 +87,13 @@ export function PrecipitationCard({
           unavailable,
         )}
       </dd>
-      <dd className="mt-2">
-        <PrecipitationDrop probability={probability} isDay={isDaytime} />
-      </dd>
       <dd className="mt-1 text-sm opacity-75">
-        {t(`weather.precipitationTypes.${type}`)}
+        {formatWeatherMeasurement(
+          probability,
+          "percent",
+          locale,
+          unavailable,
+        )} - {t(`weather.precipitationTypes.${type}`)}
       </dd>
     </Card>
   );

@@ -26,6 +26,9 @@ export function UvIndexCard({
 
   return (
     <Card className={`flex flex-col items-center p-4 text-center ${className}`}>
+      <dt className="text-sm opacity-75">
+          {t("forecastTable.uvIndex")}
+        </dt>
       <MeteoconIcon
         name={getUvMeteoconName(value)}
         isDay={isDay}
@@ -33,9 +36,7 @@ export function UvIndexCard({
         className="h-20 w-20 shrink-0 drop-shadow-sm"
       />
       <div className="flex flex-col items-center">
-        <dt className="text-sm opacity-75">
-          {t("forecastTable.uvIndex")}
-        </dt>
+        
         <dd className="text-3xl font-semibold">
           {value === null
             ? t("environment.unavailable")

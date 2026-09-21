@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
-  getAirQualityColorClass,
+  AirQualityCard,
   getAllergenMeteoconName,
   getPollenRisk,
   getPollenRiskMeteoconName,
@@ -166,31 +166,9 @@ export function ForecastCarousel({
 
               <UvIndexCard value={weather.uvIndex} isDay={isDay} />
 
-              <Card className="flex flex-col items-center p-4 text-center">
-                <dt className="text-sm text-white/70">
-                  {t("environment.airQuality.label")}
-                </dt>
-                <dd className="mt-1 flex items-center justify-center gap-2 text-2xl font-semibold">
-                  {environment?.airQuality && (
-                    <span
-                      className={`h-3 w-3 shrink-0 rounded-full ${getAirQualityColorClass(environment.airQuality.europeanIndex)}`}
-                      aria-hidden="true"
-                    />
-                  )}
-                  {environment?.airQuality
-                    ? formatNumber(
-                        environment.airQuality.europeanIndex,
-                      )
-                    : unavailable}
-                </dd>
-                {environment?.airQuality && (
-                  <dd className="mt-1 text-sm text-white/70">
-                    {t(
-                      `environment.airQuality.levels.${environment.airQuality.level}`,
-                    )}
-                  </dd>
-                )}
-              </Card>
+              <AirQualityCard
+                airQuality={environment?.airQuality ?? null}
+              />
 
               <SunTimesCard
                 sunrise={weather.sunrise}
