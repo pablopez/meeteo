@@ -96,20 +96,21 @@ describe("CityCarouselHeader", () => {
     expect(screen.getByText("--:--")).toBeInTheDocument();
   });
 
-  it("shows only the city name in the adjacent city buttons", () => {
+  it("uses chevrons on mobile and city names on larger screens", () => {
     renderHeader({ cities: [madrid, tokyo, berlin] });
 
-    expect(
-      screen.getByRole("button", { name: "Previous city: Berlin" }),
-    ).toHaveTextContent("Berlin");
+    const previousButton = screen.getByRole("button", {
+      name: "Previous city: Berlin",
+    });
+    const nextButton = screen.getByRole("button", {
+      name: "Next city: Tokyo",
+    });
 
-    expect(
-      screen.getByRole("button", { name: "Next city: Tokyo" }),
-    ).toHaveTextContent("Tokyo");
-
-    expect(
-      screen.queryByText("Tokyo, JP"),
-    ).not.toBeInTheDocument();
+    expect(previousButton.querySelector("svg")).toHaveClass("sm:hidden");
+    expect(nextButton.querySelector("svg")).toHaveClass("sm:hidden");
+    expect(screen.getByText("Berlin")).toHaveClass("hidden", "sm:inline");
+    expect(screen.getByText("Tokyo")).toHaveClass("hidden", "sm:inline");
+    expect(screen.queryByText("Tokyo, JP")).not.toBeInTheDocument();
   });
 
   it("loops to the last city when navigating previous from the first city", async () => {

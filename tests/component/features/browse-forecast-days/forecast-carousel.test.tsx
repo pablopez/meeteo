@@ -64,6 +64,11 @@ describe("ForecastCarousel", () => {
       name: "Next day",
     });
 
+    expect(nextButton.querySelector("svg")).toHaveClass("sm:hidden");
+    expect(nextButton.querySelector("span")).toHaveClass(
+      "hidden",
+      "sm:inline",
+    );
     expect(
       screen.getByRole("heading", {
         name: "Friday, September 4",

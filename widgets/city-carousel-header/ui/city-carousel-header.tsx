@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import type { City } from "@/entities/city";
 import { FavoriteCityButton } from "@/features/favorite-cities";
 import { useLiveTime } from "@/shared/lib/time/use-live-time";
+import { Icon } from "@/shared/ui";
 
 type CityLiveClockProps = {
   timezone: string;
@@ -23,7 +24,7 @@ function CityLiveClock({ timezone, locale }: CityLiveClockProps) {
   return (
     <time
       dateTime={time}
-      className="font-mono text-3xl font-semibold tabular-nums"
+      className="font-mono text-2xl font-semibold tabular-nums sm:text-3xl"
     >
       {time}
     </time>
@@ -68,7 +69,7 @@ export function CityCarouselHeader({
   return (
     <nav
       aria-label={t("location.carouselLabel")}
-      className="city-carousel-header grid w-full min-w-0 max-w-full grid-cols-2 items-stretch gap-3 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:px-0"
+      className="city-carousel-header grid w-full min-w-0 max-w-full grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:gap-3 sm:px-0"
     >
       <button
         type="button"
@@ -76,14 +77,15 @@ export function CityCarouselHeader({
         aria-label={t("location.previousCity", {
           city: previousCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-start px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
+        className="city-navigation-button flex min-w-11 items-center justify-center px-3 py-2 backdrop-blur-md transition-colors opacity-80 hover:opacity-100 sm:min-w-0 sm:justify-start"
       >
-        <span className="truncate max-w-full font-medium">
+        <Icon name="chevron-left" className="sm:hidden" />
+        <span className="hidden max-w-full truncate font-medium sm:inline">
           {previousCity.name}
         </span>
       </button>
 
-      <div className="city-information-panel flex w-full min-w-0 max-w-full flex-row items-center justify-center gap-10 px-4 py-5 text-center backdrop-blur-md">
+      <div className="city-information-panel flex w-full min-w-0 max-w-full flex-row items-center justify-center gap-2 px-2 py-5 text-center backdrop-blur-md sm:gap-10 sm:px-4">
         <FavoriteCityButton city={currentCity} />
         <div className="min-w-0 text-center">
           <h2 className="truncate text-2xl font-bold sm:text-4xl">
@@ -104,7 +106,7 @@ export function CityCarouselHeader({
                 timezone={currentTimezone}
                 locale={locale}
               />
-              <span className="text-xs text-white/60">
+              <span className="text-xs">
                 {currentTimezone}
               </span>
             </>
@@ -120,9 +122,10 @@ export function CityCarouselHeader({
         aria-label={t("location.nextCity", {
           city: nextCity.name,
         })}
-        className="city-navigation-button min-w-0 items-center justify-end px-3 py-2 backdrop-blur-md transition-colors sm:flex opacity-80 hover:opacity-100"
+        className="city-navigation-button flex min-w-11 items-center justify-center px-3 py-2 backdrop-blur-md transition-colors opacity-80 hover:opacity-100 sm:min-w-0 sm:justify-end"
       >
-        <span className="truncate max-w-full font-medium">
+        <Icon name="chevron-right" className="sm:hidden" />
+        <span className="hidden max-w-full truncate font-medium sm:inline">
           {nextCity.name}
         </span>
       </button>
