@@ -125,6 +125,18 @@ describe("Carousel", () => {
     expect(onChange).toHaveBeenCalledWith(0);
   });
 
+  it("does not change items by dragging when swipe is disabled", () => {
+    const { onChange } = renderCarousel({ swipeEnabled: false });
+    const viewport = screen
+      .getByText("First")
+      .closest("[aria-hidden]")?.parentElement?.parentElement;
+
+    fireEvent.pointerDown(viewport!, { clientX: 100 });
+    fireEvent.pointerUp(viewport!, { clientX: 20 });
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("isolates pointer gestures in a nested carousel", () => {
     const parentOnChange = jest.fn();
     const childOnChange = jest.fn();

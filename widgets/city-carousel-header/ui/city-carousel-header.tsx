@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { City } from "@/entities/city";
@@ -48,6 +49,26 @@ export function CityCarouselHeader({
 }: CityCarouselHeaderProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage ?? "en";
+  const pointerStartX = useRef<number | null>(null);
+
+  function handlePointerDown(event: React.PointerEvent<HTMLElement>) {
+    pointerStartX.current = event.clientX;
+  }
+
+  function handlePointerUp(event: React.PointerEvent<HTMLElement>) {
+    if (pointerStartX.current === null) {
+      return;
+    }
+
+    const deltaX = event.clientX - pointerStartX.current;
+    pointerStartX.current = null;
+
+    if (deltaX > 40) {
+      onPrevious();
+    } else if (deltaX < -40) {
+      onNext();
+    }
+  }
 
   if (cities.length === 0) {
     return null;
@@ -69,7 +90,9 @@ export function CityCarouselHeader({
   return (
     <nav
       aria-label={t("location.carouselLabel")}
-      className="city-carousel-header grid w-full min-w-0 max-w-full grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:gap-3 sm:px-0"
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      className="city-carousel-header grid touch-pan-y w-full min-w-0 max-w-full grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-2 px-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,3fr)_minmax(0,1fr)] sm:gap-3 sm:px-0"
     >
       <button
         type="button"

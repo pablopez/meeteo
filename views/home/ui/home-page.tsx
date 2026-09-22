@@ -207,6 +207,7 @@ export function HomePage() {
                   onChange={handleCarouselChange}
                   paginationVariant="hidden"
                   showNavigation={false}
+                  swipeEnabled={false}
                   renderItem={(location, index) => (
                     <div className="space-y-8 pt-2">
                       <WeatherOverview

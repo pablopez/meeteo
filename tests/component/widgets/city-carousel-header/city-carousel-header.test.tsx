@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { createCity, type City } from "@/entities/city";
@@ -111,6 +111,37 @@ describe("CityCarouselHeader", () => {
     expect(screen.getByText("Berlin")).toHaveClass("hidden", "sm:inline");
     expect(screen.getByText("Tokyo")).toHaveClass("hidden", "sm:inline");
     expect(screen.queryByText("Tokyo, JP")).not.toBeInTheDocument();
+  });
+
+  it("changes city when swiping the city carousel", () => {
+    const onPrevious = jest.fn();
+    const onNext = jest.fn();
+
+    renderHeader({
+      cities: [madrid, tokyo, berlin],
+      onPrevious,
+      onNext,
+    });
+
+    const carousel = screen.getByRole("navigation", {
+      name: "City carousel",
+    });
+
+    const swipe = (startX: number, endX: number) => {
+      const pointerDown = new Event("pointerdown", { bubbles: true });
+      const pointerUp = new Event("pointerup", { bubbles: true });
+
+      Object.defineProperty(pointerDown, "clientX", { value: startX });
+      Object.defineProperty(pointerUp, "clientX", { value: endX });
+      fireEvent(carousel, pointerDown);
+      fireEvent(carousel, pointerUp);
+    };
+
+    swipe(100, 20);
+    expect(onNext).toHaveBeenCalledTimes(1);
+
+    swipe(20, 100);
+    expect(onPrevious).toHaveBeenCalledTimes(1);
   });
 
   it("loops to the last city when navigating previous from the first city", async () => {

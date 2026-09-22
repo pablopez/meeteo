@@ -20,6 +20,7 @@ type CarouselProps<T> = {
   previousLabel?: string;
   nextLabel?: string;
   showNavigation?: boolean;
+  swipeEnabled?: boolean;
 };
 
 export type { CarouselProps };
@@ -36,6 +37,7 @@ export function Carousel<T>({
   previousLabel = "Previous item",
   nextLabel = "Next item",
   showNavigation = true,
+  swipeEnabled = true,
 }: CarouselProps<T>) {
   const [internalIndex, setInternalIndex] = useState(
     Math.max(
@@ -85,6 +87,10 @@ export function Carousel<T>({
   function handlePointerDown(
     event: React.PointerEvent<HTMLDivElement>,
   ) {
+    if (!swipeEnabled) {
+      return;
+    }
+
     event.stopPropagation();
     pointerStartX.current = event.clientX;
   }
@@ -92,6 +98,10 @@ export function Carousel<T>({
   function handlePointerUp(
     event: React.PointerEvent<HTMLDivElement>,
   ) {
+    if (!swipeEnabled) {
+      return;
+    }
+
     event.stopPropagation();
     if (pointerStartX.current === null) {
       return;
