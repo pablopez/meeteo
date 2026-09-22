@@ -164,7 +164,7 @@ describe("WeatherOverview", () => {
 
     expect(screen.getByText("16 °C")).toBeInTheDocument();
     expect(screen.getByText("28 °C")).toBeInTheDocument();
-    expect(screen.getByText("35%")).toBeInTheDocument();
+    expect(screen.getByText(/35%/)).toHaveTextContent("35% - Rain");
     expect(screen.getByText("1.5 mm")).toBeInTheDocument();
   });
 

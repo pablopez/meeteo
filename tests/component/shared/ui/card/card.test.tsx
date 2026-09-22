@@ -16,7 +16,8 @@ describe("Card", () => {
 
     expect(container.firstChild).toHaveClass(
       "rounded-2xl",
-      "bg-white/10",
+      "border",
+      "bg-white/05",
       "backdrop-blur-lg",
       "border-white/20",
       "overflow-hidden",

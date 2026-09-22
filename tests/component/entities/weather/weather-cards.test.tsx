@@ -27,10 +27,10 @@ describe("weather cards", () => {
 
     expect(card).toHaveClass(
       "custom-class",
-      "bg-white/10",
+      "bg-white/05",
       "backdrop-blur-lg",
       "border-white/20",
-      "duration-700",
+      "overflow-hidden",
     );
   });
 
@@ -47,8 +47,7 @@ describe("weather cards", () => {
     );
 
     expect(screen.getByText("3.5 mm")).toBeInTheDocument();
-    expect(screen.getByText("Rain")).toBeInTheDocument();
-    expect(screen.getByText("75%")).toBeInTheDocument();
+    expect(screen.getByText(/75%/)).toHaveTextContent("75% - Rain");
   });
 
   it("renders the UV index", () => {

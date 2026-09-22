@@ -17,13 +17,10 @@ describe("Panel", () => {
     expect(container.firstChild?.nodeName).toBe("SECTION");
   });
 
-  it("applies the base container styles", () => {
+  it("does not add presentation styles", () => {
     const { container } = render(<Panel>Content</Panel>);
 
-    expect(container.firstChild).toHaveClass(
-      "p-6",
-      "sm:p-8",
-    );
+    expect(container.firstChild).toHaveAttribute("class", "");
   });
 
   it("merges custom className", () => {
@@ -33,7 +30,6 @@ describe("Panel", () => {
 
     expect(container.firstChild).toHaveClass("relative");
     expect(container.firstChild).toHaveClass("z-10");
-    expect(container.firstChild).toHaveClass("rounded-xl");
   });
 
   it("forwards HTML attributes", () => {
