@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 import type { DailyEnvironmentalConditions } from "@/entities/environment";
 import type { Location } from "@/entities/location";

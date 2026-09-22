@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { getMeteoconSrc } from "../lib/meteocon-src";
 
 type MeteoconIconProps = {
@@ -18,9 +20,11 @@ export function MeteoconIcon({
   const isNight = isDay === false || isDay === 0;
 
   return (
-    <img
+    <Image
       src={getMeteoconSrc(name, isDay)}
       alt={alt}
+      width={80}
+      height={80}
       loading={loading}
       className={[className, isNight ? "invert" : ""]
         .filter(Boolean)
