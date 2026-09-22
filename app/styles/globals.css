@@ -13,27 +13,88 @@ html {
 
 body {
   min-height: 100vh;
+  color: var(--color-primary);
   background-color: #0ea5e9;
+  background-image: var(--sky-gradient);
+  background-attachment: fixed;
   transition:
     color 700ms ease-in-out,
     background-color 1000ms ease-in-out;
+  --sky-gradient: linear-gradient(to bottom, #0ea5e9, #0369a1);
   --app-background: #0ea5e9;
   --color-primary: #ffffff;
   --color-accent: #0f172a;
 }
 
-body.weather-theme-day {
-  color: var(--color-primary);
-  background-color: #0ea5e9;
+body[data-sky-state="deep-night"] {
+  --sky-gradient: linear-gradient(to bottom, #020617, #1e1b4b);
+  --app-background: #020617;
+  --color-accent: #38bdf8;
+}
+
+body[data-sky-state="pre-dawn"] {
+  --sky-gradient: linear-gradient(to bottom, #0f172a, #4338ca);
+  --app-background: #0f172a;
+  --color-accent: #7dd3fc;
+}
+
+body[data-sky-state="dawn"] {
+  --sky-gradient: linear-gradient(to bottom, #7c3aed, #fb7185, #fbbf24);
+  --app-background: #7c3aed;
+  --color-accent: #0f172a;
+}
+
+body[data-sky-state="day"] {
+  --sky-gradient: linear-gradient(to bottom, #0ea5e9, #0369a1);
   --app-background: #0ea5e9;
   --color-accent: #0f172a;
 }
 
-body.weather-theme-night {
-  color: var(--color-primary);
-  background-color: #0a0a0a;
-  --app-background: #0a0a0a;
+body[data-sky-state="dusk"] {
+  --sky-gradient: linear-gradient(to bottom, #f97316, #7c3aed, #1e1b4b);
+  --app-background: #7c3aed;
+  --color-accent: #fbbf24;
+}
+
+body[data-sky-state="post-dusk"] {
+  --sky-gradient: linear-gradient(to bottom, #312e81, #0f172a);
+  --app-background: #0f172a;
   --color-accent: #38bdf8;
+}
+
+.aqi-indicator {
+  background-color: var(--aqi-bg, rgb(255 255 255 / 0.2));
+  color: var(--aqi-fg, #ffffff);
+}
+
+[data-aqi-level="good"] {
+  --aqi-bg: rgb(16 185 129 / 0.2);
+  --aqi-fg: rgb(110 231 183);
+}
+
+[data-aqi-level="fair"] {
+  --aqi-bg: rgb(132 204 22 / 0.2);
+  --aqi-fg: rgb(190 242 100);
+}
+
+[data-aqi-level="moderate"] {
+  --aqi-bg: rgb(234 179 8 / 0.2);
+  --aqi-fg: rgb(253 224 71);
+}
+
+[data-aqi-level="poor"] {
+  --aqi-bg: rgb(249 115 22 / 0.2);
+  --aqi-fg: rgb(253 186 116);
+}
+
+[data-aqi-level="very-poor"] {
+  --aqi-bg: rgb(239 68 68 / 0.2);
+  --aqi-fg: rgb(252 165 165);
+}
+
+[data-aqi-level="extremely-poor"] {
+  --aqi-bg: rgb(168 85 247 / 0.2);
+  --aqi-fg: rgb(216 180 254);
 }
 
 .leaflet-control-container {

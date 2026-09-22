@@ -1,7 +1,7 @@
 import type {
   OpenMeteoAirQualityResponseDto,
   OpenMeteoHourlyAirQualityDto,
-} from "@/shared/api/open-meteo";
+} from "../api/open-meteo-air-quality.types";
 import {
   createAirQuality,
 } from "../model/air-quality";

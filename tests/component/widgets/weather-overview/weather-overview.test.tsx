@@ -4,24 +4,24 @@ import {
 } from "@testing-library/react";
 import {
   getSkyState,
-  getWeatherForecast,
   type WeatherForecast,
 } from "@/entities/weather";
-import {
-  getEnvironmentForecast,
-  type EnvironmentForecast,
-} from "@/entities/environment";
+import type { EnvironmentForecast } from "@/entities/environment";
+import { getWeatherForecast } from "@/entities/weather/api/get-weather-forecast";
+import { getEnvironmentForecast } from "@/entities/environment/api/get-environment-forecast";
 import type { City } from "@/entities/city";
 import { WeatherOverview } from "@/widgets/weather-overview";
 
 jest.mock("@/entities/weather", () => ({
   ...jest.requireActual("@/entities/weather"),
   getSkyState: jest.fn(),
+}));
+
+jest.mock("@/entities/weather/api/get-weather-forecast", () => ({
   getWeatherForecast: jest.fn(),
 }));
 
-jest.mock("@/entities/environment", () => ({
-  ...jest.requireActual("@/entities/environment"),
+jest.mock("@/entities/environment/api/get-environment-forecast", () => ({
   getEnvironmentForecast: jest.fn(),
 }));
 
@@ -170,6 +170,7 @@ describe("WeatherOverview", () => {
 
   it("reports the night time state to the parent", async () => {
     const handleDaytimeChange = jest.fn();
+    const handleSkyStateChange = jest.fn();
 
     mockedGetSkyState.mockReturnValue("deep-night");
     mockedGetWeatherForecast.mockResolvedValue(forecast);
@@ -181,16 +182,25 @@ describe("WeatherOverview", () => {
       <WeatherOverview
         location={madrid}
         onDaytimeChange={handleDaytimeChange}
+        onSkyStateChange={handleSkyStateChange}
       />,
     );
 
-    await screen.findByRole("heading", {
+    const heading = await screen.findByRole("heading", {
       name: "Friday, September 4",
     });
 
+    expect(heading.closest("[data-sky-state]")).toHaveAttribute(
+      "data-sky-state",
+      "deep-night",
+    );
     expect(handleDaytimeChange).toHaveBeenCalledWith(
       madrid.id,
       false,
+    );
+    expect(handleSkyStateChange).toHaveBeenCalledWith(
+      madrid.id,
+      "deep-night",
     );
   });
 

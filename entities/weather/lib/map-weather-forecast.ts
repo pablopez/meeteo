@@ -1,4 +1,4 @@
-import type { OpenMeteoForecastResponseDto } from "@/shared/api/open-meteo";
+import type { OpenMeteoForecastResponseDto } from "../api/open-meteo-forecast.types";
 import { mapWmoWeather } from "./wmo-mapper";
 import { createDailyForecast } from "../model/daily-forecast";
 import {

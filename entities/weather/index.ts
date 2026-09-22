@@ -32,6 +32,7 @@ export {
   getWeatherForecast,
   type GetWeatherForecastOptions,
 } from "./api/get-weather-forecast";
+export { useWeatherForecast } from "./model/use-weather-forecast";
 
 export {
   formatWeatherMeasurement,

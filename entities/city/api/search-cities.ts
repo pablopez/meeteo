@@ -1,7 +1,8 @@
-import { searchOpenMeteoLocations } from "@/shared/api/open-meteo";
+import { requestJson } from "@/shared/api";
 
 import { mapLocationToCity } from "../lib/map-location-to-city";
 import type { City } from "../model/city";
+import type { OpenMeteoGeocodingResponseDto } from "./open-meteo-geocoding.types";
 
 export type SearchCitiesOptions = {
   query: string;
@@ -20,14 +21,17 @@ export async function searchCities({
     return [];
   }
 
-  const normalizedLanguage =
-    language.toLowerCase().split("-")[0] || "en";
-
-  const data = await searchOpenMeteoLocations({
-    query: normalizedQuery,
+  const normalizedLanguage = language.toLowerCase().split("-")[0] || "en";
+  const parameters = new URLSearchParams({
+    name: normalizedQuery,
+    count: "10",
     language: normalizedLanguage,
-    signal,
+    format: "json",
   });
+  const data = await requestJson<OpenMeteoGeocodingResponseDto>(
+    `https://geocoding-api.open-meteo.com/v1/search?${parameters.toString()}`,
+    { signal, cache: "no-store" },
+  );
 
   return (data.results ?? []).map(mapLocationToCity);
 }

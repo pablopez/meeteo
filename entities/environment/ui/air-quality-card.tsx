@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import { Card } from "@/shared/ui";
 
-import { getAirQualityColorClass } from "../lib/get-air-quality-color-class";
 import type { AirQuality } from "../model/air-quality";
 
 type AirQualityCardProps = {
@@ -26,11 +25,8 @@ export function AirQualityCard({
       </dt>
       <dd className="mt-2">
         <span
-          className={`block h-16 w-16 rounded-full ${
-            airQuality
-              ? getAirQualityColorClass(airQuality.europeanIndex)
-              : "bg-white/20"
-          }`}
+          className="aqi-indicator block h-16 w-16 rounded-full"
+          data-aqi-level={airQuality?.level}
           aria-hidden="true"
         />
       </dd>

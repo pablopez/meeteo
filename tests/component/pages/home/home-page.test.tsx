@@ -22,8 +22,7 @@ jest.mock("@/shared/lib/time/use-live-time", () => ({
 const mockedGetCurrentLocation =
   jest.mocked(getCurrentLocation);
 
-jest.mock("@/entities/weather", () => ({
-  ...jest.requireActual("@/entities/weather"),
+jest.mock("@/entities/weather/api/get-weather-forecast", () => ({
   getWeatherForecast: jest.fn(
     () =>
       new Promise(() => {
@@ -32,8 +31,7 @@ jest.mock("@/entities/weather", () => ({
   ),
 }));
 
-jest.mock("@/entities/environment", () => ({
-  ...jest.requireActual("@/entities/environment"),
+jest.mock("@/entities/environment/api/get-environment-forecast", () => ({
   getEnvironmentForecast: jest.fn(
     () =>
       new Promise(() => {

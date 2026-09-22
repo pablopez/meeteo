@@ -1,4 +1,4 @@
-import type { OpenMeteoLocationDto } from "@/shared/api/open-meteo";
+import type { OpenMeteoLocationDto } from "../api/open-meteo-geocoding.types";
 import { createCity, type City } from "../model/city";
 
 export function mapLocationToCity(

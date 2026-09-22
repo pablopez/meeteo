@@ -3,20 +3,23 @@
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { DailyEnvironmentalConditions } from "@/entities/environment";
+import {
+  useEnvironmentForecast,
+  type DailyEnvironmentalConditions,
+} from "@/entities/environment";
 import type { Location } from "@/entities/location";
 import {
   getSkyState,
+  useWeatherForecast,
   WeatherEffects,
   type DailyForecast,
+  type SkyState,
 } from "@/entities/weather";
 import { ForecastCarousel } from "@/features/browse-forecast-days";
 import { useLiveTime } from "@/shared/lib/time/use-live-time";
 import { Panel } from "@/shared/ui";
 
 import type { ForecastDayView } from "../model/forecast-day-view";
-import { useEnvironmentForecast } from "../model/use-environment-forecast";
-import { useWeatherForecast } from "../model/use-weather-forecast";
 type WeatherOverviewProps = {
   location: Location | null;
   onTimezoneChange?: (
@@ -25,6 +28,7 @@ type WeatherOverviewProps = {
   ) => void;
   isActive?: boolean;
   onDaytimeChange?: (locationId: string, isDaytime: boolean) => void;
+  onSkyStateChange?: (locationId: string, skyState: SkyState) => void;
 };
 
 function composeForecastDays(
@@ -54,6 +58,7 @@ export function WeatherOverview({
   onTimezoneChange,
   isActive = true,
   onDaytimeChange,
+  onSkyStateChange,
 }: WeatherOverviewProps) {
   const { t, i18n } = useTranslation();
 
@@ -116,8 +121,17 @@ export function WeatherOverview({
   useEffect(() => {
     if (location && weatherForecast && isActive) {
       onDaytimeChange?.(location.id, isDaytime);
+      onSkyStateChange?.(location.id, skyState);
     }
-  }, [isActive, isDaytime, location, onDaytimeChange, weatherForecast]);
+  }, [
+    isActive,
+    isDaytime,
+    location,
+    onDaytimeChange,
+    onSkyStateChange,
+    skyState,
+    weatherForecast,
+  ]);
 
   if (weatherStatus === "idle") {
     return (
@@ -166,6 +180,7 @@ export function WeatherOverview({
 
       <Panel
         aria-labelledby="weather-title"
+        data-sky-state={skyState}
         className="relative z-10 w-full min-w-0 max-w-full"
       >
         {environmentStatus === "loading" && (

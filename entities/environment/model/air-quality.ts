@@ -11,7 +11,7 @@ export type AirQuality = {
   readonly level: AirQualityLevel;
 };
 
-function getAirQualityLevel(
+export function getAirQualityLevel(
   index: number,
 ): AirQualityLevel {
   if (index <= 20) {

@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { reverseGeocode } from "@/entities/city";
 import type { City } from "@/entities/city";
 import { getCurrentLocation } from "@/entities/location";
+import type { SkyState } from "@/entities/weather";
 import { useFavoriteCities } from "@/features/favorite-cities";
 import { useSelectedCity } from "@/features/select-city";
 import { Carousel } from "@/shared/ui";
@@ -30,8 +31,8 @@ export function HomePage() {
   const [timezones, setTimezones] = useState<
     Record<string, string>
   >({});
-  const [daytimeByLocation, setDaytimeByLocation] = useState<
-    Record<string, boolean>
+  const [skyStateByLocation, setSkyStateByLocation] = useState<
+    Record<string, SkyState>
   >({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeMenuPanel, setActiveMenuPanel] =
@@ -144,31 +145,29 @@ export function HomePage() {
     [],
   );
 
-  const handleDaytimeChange = useCallback(
-    (locationId: string, isDaytime: boolean) => {
-      setDaytimeByLocation((current) =>
-        current[locationId] === isDaytime
+  const handleSkyStateChange = useCallback(
+    (locationId: string, skyState: SkyState) => {
+      setSkyStateByLocation((current) =>
+        current[locationId] === skyState
           ? current
-          : { ...current, [locationId]: isDaytime },
+          : { ...current, [locationId]: skyState },
       );
     },
     [],
   );
 
   const activeLocation = carouselItems[activeIndex];
-  const isDaytime = activeLocation
-    ? daytimeByLocation[activeLocation.id] ?? true
-    : true;
+  const skyState = activeLocation
+    ? skyStateByLocation[activeLocation.id] ?? "day"
+    : "day";
 
   useEffect(() => {
-    document.body.classList.remove(
-      "weather-theme-day",
-      "weather-theme-night",
-    );
-    document.body.classList.add(
-      isDaytime ? "weather-theme-day" : "weather-theme-night",
-    );
-  }, [isDaytime]);
+    document.body.dataset.skyState = skyState;
+
+    return () => {
+      delete document.body.dataset.skyState;
+    };
+  }, [skyState]);
 
   return (
     <>
@@ -213,7 +212,7 @@ export function HomePage() {
                       <WeatherOverview
                         location={location}
                         onTimezoneChange={handleTimezoneChange}
-                        onDaytimeChange={handleDaytimeChange}
+                        onSkyStateChange={handleSkyStateChange}
                         isActive={index === activeIndex}
                       />
                     </div>

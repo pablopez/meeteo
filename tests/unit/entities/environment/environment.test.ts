@@ -3,7 +3,7 @@ import {
   createAllergyMeasurement,
   createDailyEnvironmentalConditions,
   createEnvironmentForecast,
-  getAirQualityColorClass,
+  getAirQualityLevel,
   getAllergenMeteoconName,
   getPollenRisk,
   getPollenRiskMeteoconName,
@@ -13,14 +13,15 @@ import {
 describe("environment domain", () => {
   describe("visual mappings", () => {
     it.each([
-      [0, "bg-green-500"],
-      [50, "bg-green-500"],
-      [51, "bg-yellow-500"],
-      [101, "bg-orange-500"],
-      [151, "bg-red-500"],
-      [201, "bg-slate-900"],
-    ] as const)("maps ICA %s to %s", (index, expectedClass) => {
-      expect(getAirQualityColorClass(index)).toBe(expectedClass);
+      [0, "good"],
+      [20, "good"],
+      [21, "fair"],
+      [41, "moderate"],
+      [61, "poor"],
+      [81, "very-poor"],
+      [101, "extremely-poor"],
+    ] as const)("maps ICA %s to %s", (index, expectedLevel) => {
+      expect(getAirQualityLevel(index)).toBe(expectedLevel);
     });
 
     it.each([

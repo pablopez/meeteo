@@ -3,7 +3,6 @@
 import { useTranslation } from "react-i18next";
 
 import {
-  getAirQualityColorClass,
   getAllergenMeteoconName,
   getPollenRisk,
   getPollenRiskMeteoconName,
@@ -176,7 +175,8 @@ export function ForecastTable({
                 <span className="inline-flex items-center gap-2">
                   {environment?.airQuality && (
                     <span
-                      className={`h-3 w-3 shrink-0 rounded-full ${getAirQualityColorClass(environment.airQuality.europeanIndex)}`}
+                      className="aqi-indicator h-3 w-3 shrink-0 rounded-full"
+                      data-aqi-level={environment.airQuality.level}
                       aria-hidden="true"
                     />
                   )}

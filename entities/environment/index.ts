@@ -1,4 +1,4 @@
-export { getAirQualityColorClass } from "./lib/get-air-quality-color-class";
+export { getAirQualityLevel } from "./lib/get-air-quality-level";
 export { AirQualityCard } from "./ui/air-quality-card";
 export {
   getAllergenMeteoconName,
@@ -36,3 +36,4 @@ export {
   getEnvironmentForecast,
   type GetEnvironmentForecastOptions,
 } from "./api/get-environment-forecast";
+export { useEnvironmentForecast } from "./model/use-environment-forecast";
