@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "pnpm run sync:meteocons",
     "build": "next build --webpack",
+    "prebuild": "pnpm run sync:meteocons",
     "build:mobile": "pnpm build && cap sync",
     "open:android": "cap open android",
     "open:ios": "cap open ios",
@@ -16,7 +18,8 @@
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "postinstall": "cpy \"node_modules/@meteocons/svg/flat/*.svg\" \"public/meteocons/flat/\" --flat && cpy \"node_modules/@meteocons/svg/monochrome/*.svg\" \"public/meteocons/monochrome/\" --flat"
+    "sync:meteocons": "cpy \"node_modules/@meteocons/svg/flat/*.svg\" \"public/meteocons/flat/\" --flat && cpy \"node_modules/@meteocons/svg/monochrome/*.svg\" \"public/meteocons/monochrome/\" --flat",
+    "postinstall": "pnpm run sync:meteocons"
   },
   "dependencies": {
     "@capacitor/core": "8.3.5",
