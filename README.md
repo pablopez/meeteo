@@ -1,6 +1,6 @@
 # 🌤️ Meeteo
 
-Aplicación moderna y multiplataforma de consulta meteorológica y condiciones ambientales en tiempo real, desarrollada con **Next.js (React)**, **TypeScript**, **Tailwind CSS** y empaquetada para móviles con **Capacitor**.
+Aplicación multiplataforma de consulta meteorológica y condiciones ambientales en tiempo real, desarrollada con **Next.js (React)**, **TypeScript**, **Tailwind CSS** y empaquetada para móviles con **Capacitor**.
 
 ---
 
@@ -23,7 +23,7 @@ Aplicación moderna y multiplataforma de consulta meteorológica y condiciones a
 - 🌡️ **Pronóstico detallado:** Previsiones horarias y diarias (temperatura, precipitación, horas de sol, índice UV).
 - 🍃 **Calidad del aire y alérgenos:** Mediciones ambientales y niveles de polen en tiempo real.
 - 📍 **Geolocalización y búsqueda predictiva:** Detección de ubicación actual y buscador de ciudades mediante autocompletado y mapa interactivo.
-- ⭐ **Gestión de favoritos:** Guardado y reordenación de ubicaciones frecuentes en almacenamiento local.
+- ⭐ **Gestión de favoritos:** Guardado, reordenación por arrastre (drag and drop) y botones de flecha de ubicaciones frecuentes en almacenamiento local.
 - 🌐 **Internacionalización (i18n):** Soporte multiidioma con detección y cambio en caliente (Español / Inglés).
 - 🎨 **Tema Solar Dinámico:** Adaptación visual al ciclo día/noche y preferencias de usuario.
 - 📱 **Multiplataforma:** Experiencia PWA web y compilación nativa para **Android** e **iOS** vía Capacitor.
@@ -56,73 +56,70 @@ El código sigue estrictamente los principios de **Feature-Sliced Design (FSD)**
 
 ### 1. Flujo de Datos y Jerarquía de Capas
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                       app/layout.tsx                        │
-│   (I18nProvider, ToastProvider, Estilos Globales, Temas)    │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    views/home (HomePage)                    │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-        ┌──────────────────────┴──────────────────────┐
-        ▼                                             ▼
-┌───────────────────────────────┐     ┌───────────────────────────────┐
-│     widgets/app-menu          │     │    widgets/weather-overview   │
-│ (Menús, Idioma, Tema, Favs)   │     │ (Pronóstico, Horas, Métricas) │
-└───────────────┬───────────────┘     └───────────────┬───────────────┘
-                │                                     │
-                ▼                                     ▼
-┌───────────────────────────────┐     ┌───────────────────────────────┐
-│           features/           │     │           features/           │
-│  - search-city                │     │  - browse-forecast-days       │
-│  - locate-user                │     │  - change-forecast-view       │
-│  - select-city-from-map       │     └───────────────┬───────────────┘
-│  - favorite-cities            │                     │
-└───────────────┬───────────────┘                     │
-                │                                     │
-                └──────────────────┬──────────────────┘
-                                   ▼
-┌─────────────────────────────────────────────────────────────┐
-│                          entities/                          │
-│     city       |    weather    |   environment   | favorite │
-│ (Modelos TS, adaptadores DTO/WMO, lógica interna de dominio)│
-└──────────────────────────────┬──────────────────────────────┘
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                           shared/                           │
-│  - UI: Button, Card, Carousel, Panel, Select, LiveClock     │
-│  - API: Open-Meteo Client (requestJson, config)             │
-│  - Lib: useLiveTime, Toast system, i18n config              │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph AppLayer [app/layout.tsx]
+        App[I18nProvider, ToastProvider, Estilos Globales, Temas]
+    end
+
+    subgraph ViewsLayer [views/home]
+        Home[HomePage]
+    end
+
+    subgraph WidgetsLayer [widgets/]
+        WMenu["widgets/app-menu<br/>Menús, Idioma, Tema, Favs"]
+        WWeather["widgets/weather-overview<br/>Pronóstico, Horas, Métricas"]
+    end
+
+    subgraph FeaturesLayer [features/]
+        FSearch["search-city<br/>locate-user<br/>select-city-from-map<br/>favorite-cities"]
+        FWeather["browse-forecast-days<br/>change-forecast-view"]
+    end
+
+    subgraph EntitiesLayer [entities/]
+        Entities["city | weather | environment | favorite-cities<br/>Modelos TS, adaptadores DTO/WMO, lógica de dominio"]
+    end
+
+    subgraph SharedLayer [shared/]
+        SharedUI["UI: Button, Card, Carousel, Panel, Select, SortableList, LiveClock"]
+        SharedAPI["API: Open-Meteo Client requestJson, config"]
+        SharedLib["Lib: useLiveTime, Toast system, i18n config"]
+    end
+
+    AppLayer --> ViewsLayer
+    ViewsLayer --> WidgetsLayer
+    WMenu --> FSearch
+    WWeather --> FWeather
+    FSearch --> EntitiesLayer
+    FWeather --> EntitiesLayer
+    WWeather --> EntitiesLayer
+    EntitiesLayer --> SharedLayer
+    FeaturesLayer --> SharedLayer
+    WidgetsLayer --> SharedLayer
 ```
 
 ---
 
 ### 2. Ciclo de Consulta Meteorológica
 
-```text
-[ Usuario ] ──> Escribe ciudad o pulsa geolocalización
-      │
-      ├──> (Feature: search-city / locate-user)
-      │         │
-      │         └──> (Entity: city/api) ──> Open-Meteo Geocoding API
-      │                   │
-      ▼                   └──> Actualiza: SelectedCityState (Storage/Model)
-[ Hook: useWeatherForecast ]
-      │
-      ├──> Llama a Open-Meteo Weather API (shared/api/open-meteo)
-      │
-      ├──> Transforma códigos WMO y unidades (entities/weather/lib)
-      │
-      └──> Genera estado (DailyForecast, HourlyForecast, SolarTimes)
-                │
-                ▼
-[ Widget: weather-overview ]
-      ├──> Renderiza: TemperatureCard, PrecipitationCard, SunTimesCard
-      └──> Muestra efectos visuales dinámicos (WeatherEffects)
+```mermaid
+flowchart TD
+    User([Usuario]) -->|Escribe ciudad o pulsa geolocalización| SearchFeature[Feature: search-city / locate-user]
+
+    SearchFeature --> CityAPI[Entity: city/api]
+    CityAPI -->|Consulta| GeoAPI[Open-Meteo Geocoding API]
+    CityAPI -->|Actualiza| SelectedCityState[SelectedCityState<br/>Storage / Model]
+
+    SelectedCityState --> WeatherHook[Hook: useWeatherForecast]
+
+    WeatherHook -->|Llama| WeatherAPI[Open-Meteo Weather API<br/>shared/api/open-meteo]
+    WeatherHook -->|Transforma códigos WMO y unidades| WeatherLib[entities/weather/lib]
+    WeatherHook -->|Genera estado| ForecastState[DailyForecast<br/>HourlyForecast<br/>SolarTimes]
+
+    ForecastState --> WeatherWidget[Widget: weather-overview]
+
+    WeatherWidget -->|Renderiza| WeatherCards[TemperatureCard<br/>PrecipitationCard<br/>SunTimesCard]
+    WeatherWidget -->|Muestra efectos visuales dinámicos| WeatherEffects[WeatherEffects]
 ```
 
 ---
@@ -208,11 +205,12 @@ En el `package.json` dispones de los siguientes scripts principales:
 - `pnpm build`: Genera la compilación de producción optimizada.
 - `pnpm start`: Arranca el servidor en modo producción.
 - `pnpm lint`: Ejecuta ESLint para comprobar estilos y buenas prácticas.
+- `pnpm typecheck`: Verifica los tipos de TypeScript sin emitir archivos.
 - `pnpm test`: Lanza los tests unitarios y de componentes con Jest.
 - `pnpm test:e2e`: Ejecuta las pruebas de extremo a extremo con Playwright.
-- `pnpm cap:sync`: Sincroniza la build web con las plataformas nativas Android e iOS.
-- `pnpm cap:open android`: Abre el proyecto en Android Studio.
-- `pnpm cap:open ios`: Abre el proyecto en Xcode.
+- `pnpm build:mobile`: Genera la build de producción y sincroniza con las plataformas nativas Android e iOS.
+- `pnpm open:android`: Abre el proyecto en Android Studio.
+- `pnpm open:ios`: Abre el proyecto en Xcode.
 
 ---
 
@@ -221,7 +219,7 @@ En el `package.json` dispones de los siguientes scripts principales:
 El proyecto implementa una pirámide de tests exhaustiva:
 
 ```text
-           / \
+           /---\
           / E2E \       --> Playwright (Flujos completos de usuario)
          /-------\
         /  Comp.  \     --> React Testing Library (Widgets, Features, UI)
