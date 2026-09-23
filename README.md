@@ -1,6 +1,6 @@
 # 🌤️ Meeteo
 
-> Aplicación moderna y multiplataforma de consulta meteorológica y condiciones ambientales en tiempo real, desarrollada con **Next.js (React)**, **TypeScript**, **Tailwind CSS** y empaquetada para móviles con **Capacitor**.
+Aplicación moderna y multiplataforma de consulta meteorológica y condiciones ambientales en tiempo real, desarrollada con **Next.js (React)**, **TypeScript**, **Tailwind CSS** y empaquetada para móviles con **Capacitor**.
 
 ---
 
