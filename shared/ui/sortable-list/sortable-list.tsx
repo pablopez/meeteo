@@ -19,8 +19,15 @@ type SortableListProps<T> = {
     actions: SortableListItemActions,
   ) => React.ReactNode;
   onReorder: (items: T[]) => void;
-  onRemove: (item: T) => void;
-  add: (item: T) => void;
+  onRemove?: (item: T) => void;
+  add?: (item: T) => void;
+  renderLeftAccessory?: (
+    item: T,
+    index: number,
+  ) => React.ReactNode;
+  showDragHandle?: boolean;
+  "aria-label"?: string;
+  itemClassName?: string;
 };
 
 export type {
@@ -34,6 +41,10 @@ export function SortableList<T>({
   renderItem,
   onReorder,
   onRemove,
+  renderLeftAccessory,
+  showDragHandle = true,
+  "aria-label": ariaLabel,
+  itemClassName = "",
 }: SortableListProps<T>) {
   const [draggedIndex, setDraggedIndex] =
     useState<number | null>(null);
@@ -64,7 +75,7 @@ export function SortableList<T>({
     <ul
       className="space-y-2"
       role="list"
-      aria-label="Sortable list"
+      aria-label={ariaLabel ?? "Sortable list"}
     >
       {items.map((item, index) => (
         <li
@@ -94,20 +105,30 @@ export function SortableList<T>({
               draggedIndex !== index
               ? "ring-2 ring-white/50"
               : "",
+            itemClassName,
           ]
             .filter(Boolean)
             .join(" ")}
         >
-          <div
-            className="cursor-grab p-2  active:cursor-grabbing"
-            aria-hidden="true"
-          >
-            <Icon name="grip" size="sm" />
-          </div>
+          {showDragHandle && (
+            <div
+              className="cursor-grab p-2 active:cursor-grabbing"
+              aria-hidden="true"
+            >
+              <Icon name="grip" size="sm" />
+            </div>
+          )}
+
+          {renderLeftAccessory && (
+            <div className="flex items-center">
+              {renderLeftAccessory(item, index)}
+            </div>
+          )}
 
           <div className="min-w-0 flex-1">
             {renderItem(item, {
-              onRemove: () => onRemove(item),
+              onRemove: () =>
+                onRemove?.(item),
             })}
           </div>
         </li>
