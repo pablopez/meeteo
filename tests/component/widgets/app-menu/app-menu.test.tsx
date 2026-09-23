@@ -1,7 +1,23 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import packageJson from "../../../../package.json";
 import { AppMenu, type PanelKey } from "@/widgets/app-menu";
+
+const packageAuthor =
+  typeof packageJson.author === "object"
+    ? packageJson.author
+    : {
+        name: "Pablo López",
+        url: "https://github.com/pablopez",
+      };
+
+const originalVersion =
+  process.env.NEXT_PUBLIC_APP_VERSION;
+const originalAuthorName =
+  process.env.NEXT_PUBLIC_APP_AUTHOR_NAME;
+const originalAuthorUrl =
+  process.env.NEXT_PUBLIC_APP_AUTHOR_URL;
 
 type RenderAppMenuOptions = {
   isOpen?: boolean;
@@ -33,6 +49,44 @@ function renderAppMenu({
 }
 
 describe("AppMenu", () => {
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_APP_VERSION =
+      packageJson.version;
+
+    if (packageAuthor?.name) {
+      process.env.NEXT_PUBLIC_APP_AUTHOR_NAME =
+        packageAuthor.name;
+    }
+
+    if (packageAuthor?.url) {
+      process.env.NEXT_PUBLIC_APP_AUTHOR_URL =
+        packageAuthor.url;
+    }
+  });
+
+  afterEach(() => {
+    if (originalVersion === undefined) {
+      delete process.env.NEXT_PUBLIC_APP_VERSION;
+    } else {
+      process.env.NEXT_PUBLIC_APP_VERSION =
+        originalVersion;
+    }
+
+    if (originalAuthorName === undefined) {
+      delete process.env.NEXT_PUBLIC_APP_AUTHOR_NAME;
+    } else {
+      process.env.NEXT_PUBLIC_APP_AUTHOR_NAME =
+        originalAuthorName;
+    }
+
+    if (originalAuthorUrl === undefined) {
+      delete process.env.NEXT_PUBLIC_APP_AUTHOR_URL;
+    } else {
+      process.env.NEXT_PUBLIC_APP_AUTHOR_URL =
+        originalAuthorUrl;
+    }
+  });
+
   it("renders a fixed header with the application title and menu toggle", () => {
     renderAppMenu({ isOpen: false });
 
@@ -192,12 +246,17 @@ describe("AppMenu", () => {
     expect(screen.getByText("Open-Meteo")).toBeInTheDocument();
     expect(screen.getByText("CAMS")).toBeInTheDocument();
     expect(screen.getByText("OpenStreetMap")).toBeInTheDocument();
-    expect(screen.getByText("Version v1.0.0")).toBeInTheDocument();
-    const authorLink = screen.getByText("Pablo López");
+    expect(
+      screen.getByText(`Version v${packageJson.version}`),
+    ).toBeInTheDocument();
+    const authorLink = screen.getByText(
+      packageAuthor?.name ?? "Pablo López",
+    );
 
     expect(authorLink).toHaveAttribute(
       "href",
-      "https://github.com/pablopez",
+      packageAuthor?.url ??
+        "https://github.com/pablopez",
     );
     expect(authorLink).toHaveAttribute("target", "_blank");
     expect(authorLink).toHaveAttribute("rel", "noreferrer");
