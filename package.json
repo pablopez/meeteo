@@ -1,6 +1,12 @@
 {
   "name": "meeteo",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Pablo López",
+    "email": "pablolopezjimenez@gmail.com",
+    "url": "https://www.linkedin.com/in/pablo-l%C3%B3pez-jim%C3%A9nez-a9a4299a/"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

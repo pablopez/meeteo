@@ -164,5 +164,7 @@ menu: {
   mapData: "Map data",
   info: "App information",
   appInfo: "About Meeteo",
+  version: "Version v{{version}}",
+  developedBy: "Developed by",
 },
 } as const;

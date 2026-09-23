@@ -192,6 +192,16 @@ describe("AppMenu", () => {
     expect(screen.getByText("Open-Meteo")).toBeInTheDocument();
     expect(screen.getByText("CAMS")).toBeInTheDocument();
     expect(screen.getByText("OpenStreetMap")).toBeInTheDocument();
+    expect(screen.getByText("Version v1.0.0")).toBeInTheDocument();
+    const authorLink = screen.getByText("Pablo López");
+
+    expect(authorLink).toHaveAttribute(
+      "href",
+      "https://github.com/pablopez",
+    );
+    expect(authorLink).toHaveAttribute("target", "_blank");
+    expect(authorLink).toHaveAttribute("rel", "noreferrer");
+    expect(screen.getByText(`© ${new Date().getFullYear()}`)).toBeInTheDocument();
   });
 
   it("closes the app info panel when toggled again", async () => {

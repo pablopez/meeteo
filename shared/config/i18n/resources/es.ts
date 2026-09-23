@@ -163,5 +163,7 @@ menu: {
   mapData: "Datos cartográficos",
   info: "Información de la app",
   appInfo: "Acerca de Meeteo",
+  version: "Versión v{{version}}",
+  developedBy: "Desarrollado por",
 },
 } as const;
